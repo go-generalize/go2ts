@@ -22,8 +22,6 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 			continue
 		}
 
-		tst := p.parseType(v.Type())
-
 		jsonTag := strings.SplitN(reflect.StructTag(tag).Get("json"), ",", 2)
 		field := ""
 		if len(jsonTag) >= 1 {
@@ -31,6 +29,11 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 		}
 		optional := len(jsonTag) >= 2 && jsonTag[1] == "omitempty"
 
+		if field == "-" {
+			continue
+		}
+
+		tst := p.parseType(v.Type())
 		if len(field) == 0 {
 			if o, ok := tst.(*tstypes.Object); ok {
 				for k, v := range o.Entries {
@@ -58,8 +61,6 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 			continue
 		}
 
-		tst := p.parseType(v.Type())
-
 		jsonTag := strings.SplitN(reflect.StructTag(tag).Get("json"), ",", 2)
 		field := ""
 		if len(jsonTag) >= 1 {
@@ -67,10 +68,15 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 		}
 		optional := len(jsonTag) >= 2 && jsonTag[1] == "omitempty"
 
+		if field == "-" {
+			continue
+		}
+
 		if len(field) == 0 {
 			field = v.Name()
 		}
 
+		tst := p.parseType(v.Type())
 		if optional {
 			obj.Entries[field] = tstypes.ObjectEntry{
 				Type:     p.removeNullable(tst),
