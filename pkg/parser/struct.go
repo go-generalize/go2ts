@@ -18,7 +18,7 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 		v := strct.Field(i)
 		tag := strct.Tag(i)
 
-		if !v.Embedded() {
+		if !v.Exported() || !v.Embedded() {
 			continue
 		}
 
@@ -54,7 +54,7 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 		v := strct.Field(i)
 		tag := strct.Tag(i)
 
-		if v.Embedded() {
+		if !v.Exported() || v.Embedded() {
 			continue
 		}
 
@@ -71,11 +71,27 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 			field = v.Name()
 		}
 
-		obj.Entries[field] = tstypes.ObjectEntry{
-			Type:     tst,
-			Optional: optional,
+		if optional {
+			obj.Entries[field] = tstypes.ObjectEntry{
+				Type:     p.removeNullable(tst),
+				Optional: true,
+			}
+		} else {
+			obj.Entries[field] = tstypes.ObjectEntry{
+				Type:     tst,
+				Optional: false,
+			}
 		}
+
 	}
 
 	return &obj
+}
+
+func (p *Parser) removeNullable(typ tstypes.Type) tstypes.Type {
+	if nullable, ok := typ.(*tstypes.Nullable); ok {
+		return nullable.Inner
+	}
+
+	return typ
 }

@@ -3,6 +3,7 @@ package parser
 import (
 	"go/constant"
 	"go/types"
+	"sort"
 	"strconv"
 
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
@@ -50,5 +51,18 @@ func (p *Parser) parseConst(c *types.Const) {
 		t.AddCandidates(unquoted)
 	default:
 		panic("unsupported enum type")
+	}
+}
+
+func (p *Parser) sortConst() {
+	for _, v := range p.types {
+		switch v := v.(type) {
+		case *tstypes.String:
+			sort.Strings(v.Enum)
+		case *tstypes.Number:
+			sort.Slice(v.Enum, func(i int, j int) bool {
+				return v.Enum[i] < v.Enum[j]
+			})
+		}
 	}
 }

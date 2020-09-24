@@ -7,7 +7,6 @@ import (
 )
 
 type Type interface {
-	IsNullable() bool
 }
 
 type Enumerable interface {
@@ -29,37 +28,21 @@ type Object struct {
 	Entries map[string]ObjectEntry
 }
 
-func (*Object) IsNullable() bool {
-	return false
-}
-
 func (n *Object) SetName(name string) {
 	n.Name = name
 }
 
 type Array struct {
-	InnerType Type
-}
-
-func (*Array) IsNullable() bool {
-	return false
+	Inner Type
 }
 
 type Date struct {
-}
-
-func (*Date) IsNullable() bool {
-	return false
 }
 
 type Number struct {
 	Name string
 
 	Enum []int64
-}
-
-func (*Number) IsNullable() bool {
-	return false
 }
 
 func (n *Number) AddCandidates(v interface{}) {
@@ -85,10 +68,6 @@ type String struct {
 	Enum []string
 }
 
-func (*String) IsNullable() bool {
-	return false
-}
-
 func (n *String) AddCandidates(v interface{}) {
 	switch v := v.(type) {
 	case string:
@@ -105,14 +84,8 @@ func (n *String) SetName(name string) {
 type Boolean struct {
 }
 
-func (*Boolean) IsNullable() bool {
-	return false
-}
-
 type Nullable struct {
 	Inner Type
 }
 
-func (*Nullable) IsNullable() bool {
-	return true
-}
+type Any struct{}
