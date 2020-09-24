@@ -33,8 +33,14 @@ type Data struct {
 	Status Status
 
 	Foo *foo `json:",omitempty"`
+
+	U Unexported
 }
 
 type foo struct {
 	V int
+}
+
+type Unexported struct {
+	Data int
 }

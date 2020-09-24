@@ -14,6 +14,8 @@ type Parser struct {
 	pkgs []*packages.Package
 
 	types map[string]tstypes.Type
+
+	Filter func(name string) bool
 }
 
 func getPackagePath(dir string) (root string, pkg string, err error) {
@@ -84,7 +86,15 @@ func (p *Parser) exported(t *types.Named) bool {
 		}
 	})
 
-	return flag
+	if !flag {
+		return false
+	}
+
+	if p.Filter != nil && !p.Filter(t.Obj().Name()) {
+		return false
+	}
+
+	return true
 }
 
 func (p *Parser) parseNamed(t *types.Named) tstypes.Type {
@@ -178,6 +188,10 @@ func (p *Parser) Parse() (map[string]tstypes.Type, error) {
 			}
 
 			if v, ok := obj.(*types.TypeName); ok && !v.IsAlias() {
+				if p.Filter != nil && !p.Filter(v.Name()) {
+					continue
+				}
+
 				p.parseType(v.Type())
 			}
 		}

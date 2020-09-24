@@ -7,7 +7,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-func parse(t *testing.T, dir string) map[string]tstypes.Type {
+func parse(t *testing.T, dir string, filter func(name string) bool) map[string]tstypes.Type {
 	t.Helper()
 
 	parser, err := NewParser(dir)
@@ -15,6 +15,7 @@ func parse(t *testing.T, dir string) map[string]tstypes.Type {
 	if err != nil {
 		t.Fatalf("failed to initialize parser: %+v", err)
 	}
+	parser.Filter = filter
 
 	types, err := parser.Parse()
 
@@ -27,7 +28,10 @@ func parse(t *testing.T, dir string) map[string]tstypes.Type {
 
 func TestParser(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		types := parse(t, "./testdata/success")
+		types := parse(t, "./testdata/success", func(name string) bool {
+			t.Log("checking export status: ", name)
+			return name != "Unexported"
+		})
 
 		expected := map[string]tstypes.Type{
 			"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Embedded": &tstypes.Object{
@@ -97,6 +101,15 @@ func TestParser(t *testing.T) {
 						Type: &tstypes.Object{
 							Entries: map[string]tstypes.ObjectEntry{
 								"V": {
+									Type: &tstypes.Number{},
+								},
+							},
+						},
+					},
+					"U": {
+						Type: &tstypes.Object{
+							Entries: map[string]tstypes.ObjectEntry{
+								"Data": {
 									Type: &tstypes.Number{},
 								},
 							},
