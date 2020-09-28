@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"go/types"
 	"path/filepath"
 	"reflect"
@@ -13,7 +14,8 @@ import (
 type Parser struct {
 	pkgs []*packages.Package
 
-	types map[string]tstypes.Type
+	types  map[string]tstypes.Type
+	consts map[string][]interface{}
 
 	Filter func(name string) bool
 }
@@ -115,6 +117,14 @@ func (p *Parser) parseNamed(t *types.Named) tstypes.Type {
 	typ := p.parseType(t.Underlying())
 
 	if exported {
+		if typ, ok := typ.(tstypes.Enumerable); ok {
+			consts, _ := p.consts[t.String()]
+
+			for i := range consts {
+				typ.AddCandidates(consts[i])
+			}
+		}
+
 		if named, ok := typ.(tstypes.NamedType); ok {
 			named.SetName(t.Obj().Name())
 		}
@@ -145,6 +155,19 @@ func (p *Parser) parseArray(u *types.Array) tstypes.Type {
 	}
 }
 
+func (p *Parser) parseMap(u *types.Map) tstypes.Type {
+	keyType := p.parseType(u.Key())
+
+	if !keyType.UsedAsMapKey() {
+		panic(keyType.String() + " cannot be used as key")
+	}
+
+	return &tstypes.Map{
+		Key:   keyType,
+		Value: p.parseType(u.Elem()),
+	}
+}
+
 func (p *Parser) parseInterface(u *types.Interface) tstypes.Type {
 	return &tstypes.Any{}
 }
@@ -164,6 +187,8 @@ func (p *Parser) parseType(u types.Type) tstypes.Type {
 		typ = p.parseSlice(u)
 	case *types.Array:
 		typ = p.parseArray(u)
+	case *types.Map:
+		typ = p.parseMap(u)
 	case *types.Interface:
 		typ = p.parseInterface(u)
 	default:
@@ -173,8 +198,39 @@ func (p *Parser) parseType(u types.Type) tstypes.Type {
 	return typ
 }
 
-func (p *Parser) Parse() (map[string]tstypes.Type, error) {
+func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
+	defer func() {
+		if e := recover(); e != nil {
+			var ok bool
+			err, ok = e.(error)
+
+			if !ok {
+				err = fmt.Errorf("%+v", e)
+			}
+		}
+	}()
+
 	p.types = make(map[string]tstypes.Type)
+	p.consts = make(map[string][]interface{})
+
+	// parse const
+	packages.Visit(p.pkgs, nil, func(pkg *packages.Package) {
+		for _, obj := range pkg.TypesInfo.Defs {
+			if obj == nil {
+				continue
+			}
+
+			if obj.Parent() != pkg.Types.Scope() {
+				continue
+			}
+
+			switch v := obj.(type) {
+			case *types.Const: // const a = 1
+				p.parseConst(v)
+			}
+
+		}
+	})
 
 	// parse types
 	packages.Visit(p.pkgs, nil, func(pkg *packages.Package) {
@@ -194,25 +250,6 @@ func (p *Parser) Parse() (map[string]tstypes.Type, error) {
 
 				p.parseType(v.Type())
 			}
-		}
-	})
-
-	// parse const
-	packages.Visit(p.pkgs, nil, func(pkg *packages.Package) {
-		for _, obj := range pkg.TypesInfo.Defs {
-			if obj == nil {
-				continue
-			}
-
-			if obj.Parent() != pkg.Types.Scope() {
-				continue
-			}
-
-			switch v := obj.(type) {
-			case *types.Const: // const a = 1
-				p.parseConst(v)
-			}
-
 		}
 	})
 

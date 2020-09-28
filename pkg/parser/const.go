@@ -9,20 +9,18 @@ import (
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
 )
 
+func (p *Parser) addCandidates(typ string, val interface{}) {
+	arr, ok := p.consts[typ]
+
+	if !ok {
+		arr = make([]interface{}, 0, 10)
+	}
+
+	p.consts[typ] = append(arr, val)
+}
+
 func (p *Parser) parseConst(c *types.Const) {
 	if !c.Exported() {
-		return
-	}
-
-	typ, ok := p.types[c.Type().String()]
-
-	if !ok {
-		return
-	}
-
-	t, ok := typ.(tstypes.Enumerable)
-
-	if !ok {
 		return
 	}
 
@@ -31,26 +29,26 @@ func (p *Parser) parseConst(c *types.Const) {
 		v, err := strconv.ParseInt(c.Val().ExactString(), 10, 64)
 
 		if err != nil {
-			panic(err)
+			return
 		}
-		t.AddCandidates(v)
+
+		p.addCandidates(c.Type().String(), v)
 	case constant.Float:
 		v, err := strconv.ParseFloat(c.Val().ExactString(), 64)
 
 		if err != nil {
-			panic(err)
+			return
 		}
-		t.AddCandidates(v)
+
+		p.addCandidates(c.Type().String(), v)
 	case constant.String:
 		unquoted, err := strconv.Unquote(c.Val().ExactString())
 
 		if err != nil {
-			panic(err)
+			return
 		}
 
-		t.AddCandidates(unquoted)
-	default:
-		panic("unsupported enum type")
+		p.addCandidates(c.Type().String(), unquoted)
 	}
 }
 

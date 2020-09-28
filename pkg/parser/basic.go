@@ -2,19 +2,20 @@ package parser
 
 import (
 	"go/types"
+	"reflect"
 
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
 )
 
 func (p *Parser) parseBasic(t *types.Basic) tstypes.Type {
 	switch {
-	case t.Info()&(types.IsNumeric|types.IsFloat) != 0:
+	case t.Info()&(types.IsInteger|types.IsFloat) != 0:
 		return &tstypes.Number{}
 	case t.Info()&types.IsBoolean != 0:
 		return &tstypes.Boolean{}
 	case t.Info()&types.IsString != 0:
 		return &tstypes.String{}
 	default:
-		panic("unsupported type")
+		panic("unsupported type: " + reflect.TypeOf(t).String())
 	}
 }
