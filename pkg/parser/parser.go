@@ -145,6 +145,19 @@ func (p *Parser) parseArray(u *types.Array) tstypes.Type {
 	}
 }
 
+func (p *Parser) parseMap(u *types.Map) tstypes.Type {
+	keyType := p.parseType(u)
+
+	if !keyType.UsedAsMapKey() {
+		panic(keyType.String() + " cannot be used as key")
+	}
+
+	return &tstypes.Map{
+		Key:   keyType,
+		Value: p.parseType(u),
+	}
+}
+
 func (p *Parser) parseInterface(u *types.Interface) tstypes.Type {
 	return &tstypes.Any{}
 }
