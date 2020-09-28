@@ -35,6 +35,8 @@ type Data struct {
 	Foo *foo `json:",omitempty"`
 
 	U Unexported
+
+	Hidden int `json:"-"`
 }
 
 type foo struct {
