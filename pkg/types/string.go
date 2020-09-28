@@ -26,7 +26,7 @@ func (n *String) AddCandidates(v interface{}) {
 	case string:
 		n.Enum = append(n.Enum, v)
 	default:
-		panic(fmt.Sprintf("unsupported type: %s", reflect.TypeOf(v)))
+		panic(fmt.Sprintf("unsupported type for string union type: %s", reflect.TypeOf(v)))
 	}
 }
 

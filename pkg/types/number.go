@@ -31,7 +31,7 @@ func (n *Number) AddCandidates(v interface{}) {
 
 		n.Enum = append(n.Enum, v)
 	default:
-		panic(fmt.Sprintf("unsupported type: %s", reflect.TypeOf(v)))
+		panic(fmt.Sprintf("unsupported type for number union type: %s", reflect.TypeOf(v)))
 	}
 }
 
