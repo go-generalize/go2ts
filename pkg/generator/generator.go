@@ -49,6 +49,8 @@ func (g *Generator) generateType(t tstypes.Type) string {
 		return g.generateNullable(v)
 	case *tstypes.Any:
 		return g.generateAny(v)
+	case *tstypes.Map:
+		return g.generateMap(v)
 	default:
 		panic("unsupported")
 	}
