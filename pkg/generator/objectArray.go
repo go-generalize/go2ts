@@ -12,6 +12,14 @@ func (g *Generator) generateArray(typ *tstypes.Array) string {
 	return g.generateType(typ.Inner) + "[]"
 }
 
+func (g *Generator) generateMap(obj *tstypes.Map) string {
+	return fmt.Sprintf(
+		"{[key: %s]: %s}",
+		g.generateType(obj.Key),
+		g.generateType(obj.Value),
+	)
+}
+
 func (g *Generator) generateObject(obj *tstypes.Object, root bool) string {
 	if !root && obj.Name != "" {
 		return obj.Name
