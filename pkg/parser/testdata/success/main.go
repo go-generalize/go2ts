@@ -31,6 +31,7 @@ type Data struct {
 	Array []int
 
 	Status Status
+	Map    map[string]Status
 
 	Foo *foo `json:",omitempty"`
 

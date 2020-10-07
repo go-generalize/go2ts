@@ -15,11 +15,15 @@ type Number struct {
 }
 
 var _ Type = &Number{}
-var _ NamedType = &Object{}
+var _ NamedType = &Number{}
 var _ Enumerable = &Number{}
 
 func (e *Number) UsedAsMapKey() bool {
-	return false
+	if len(e.Enum) != 0 {
+		return false
+	}
+
+	return true
 }
 
 func (n *Number) AddCandidates(v interface{}) {

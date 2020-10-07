@@ -14,11 +14,15 @@ type String struct {
 }
 
 var _ Type = &String{}
-var _ NamedType = &Object{}
+var _ NamedType = &String{}
 var _ Enumerable = &String{}
 
 func (e *String) UsedAsMapKey() bool {
-	return false
+	if len(e.Enum) != 0 {
+		return false
+	}
+
+	return true
 }
 
 func (n *String) AddCandidates(v interface{}) {

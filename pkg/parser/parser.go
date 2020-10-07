@@ -17,7 +17,10 @@ type Parser struct {
 	types  map[string]tstypes.Type
 	consts map[string][]interface{}
 
-	Filter func(name string) bool
+	BasePackage      string
+	Filter           func(name string) bool
+	ExportAll        bool
+	ExportUnexported bool
 }
 
 func getPackagePath(dir string) (root string, pkg string, err error) {
@@ -72,12 +75,17 @@ func NewParser(dir string) (*Parser, error) {
 	}
 
 	return &Parser{
-		pkgs: pkgs,
+		pkgs:        pkgs,
+		BasePackage: pkg,
 	}, nil
 }
 
 func (p *Parser) exported(t *types.Named) bool {
-	if !t.Obj().Exported() {
+	if p.ExportAll {
+		return true
+	}
+
+	if !p.ExportUnexported && !t.Obj().Exported() {
 		return false
 	}
 
@@ -92,7 +100,7 @@ func (p *Parser) exported(t *types.Named) bool {
 		return false
 	}
 
-	if p.Filter != nil && !p.Filter(t.Obj().Name()) {
+	if p.Filter != nil && !p.Filter(t.String()) {
 		return false
 	}
 
@@ -126,7 +134,7 @@ func (p *Parser) parseNamed(t *types.Named) tstypes.Type {
 		}
 
 		if named, ok := typ.(tstypes.NamedType); ok {
-			named.SetName(t.Obj().Name())
+			named.SetName(t.String())
 		}
 
 		p.types[t.String()] = typ
@@ -228,7 +236,6 @@ func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
 			case *types.Const: // const a = 1
 				p.parseConst(v)
 			}
-
 		}
 	})
 
@@ -244,7 +251,7 @@ func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
 			}
 
 			if v, ok := obj.(*types.TypeName); ok && !v.IsAlias() {
-				if p.Filter != nil && !p.Filter(v.Name()) {
+				if p.Filter != nil && !p.Filter(v.Type().String()) {
 					continue
 				}
 

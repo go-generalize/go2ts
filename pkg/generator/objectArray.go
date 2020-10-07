@@ -22,7 +22,7 @@ func (g *Generator) generateMap(obj *tstypes.Map) string {
 
 func (g *Generator) generateObject(obj *tstypes.Object, root bool) string {
 	if !root && obj.Name != "" {
-		return obj.Name
+		return g.altPkgs[obj.Name]
 	}
 
 	type entry struct {

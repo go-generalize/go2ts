@@ -6,7 +6,7 @@ export type Data = {
 	Foo?: {
 		V: number;
 	};
-	Map: {[key: string]: "Foo" | "Bar"};
+	Map: {[key: string]: "Failure" | "OK"};
 	Package: {
 		data: number;
 	} | null;

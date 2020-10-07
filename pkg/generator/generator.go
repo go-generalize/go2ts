@@ -2,19 +2,26 @@ package generator
 
 import (
 	"bytes"
+	"fmt"
 	"sort"
 	"strings"
 
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
+	"github.com/go-generalize/go2ts/pkg/util"
+	"github.com/iancoleman/strcase"
 )
 
 type Generator struct {
-	types map[string]tstypes.Type
+	types   map[string]tstypes.Type
+	altPkgs map[string]string
+
+	BasePackage string
 }
 
 func NewGenerator(types map[string]tstypes.Type) *Generator {
 	return &Generator{
-		types: types,
+		types:   types,
+		altPkgs: map[string]string{},
 	}
 }
 
@@ -76,8 +83,47 @@ func (g *Generator) Generate() string {
 	}
 
 	sort.Slice(entries, func(i, j int) bool {
+		left := strings.HasPrefix(entries[i].key, g.BasePackage+".")
+		right := strings.HasPrefix(entries[j].key, g.BasePackage+".")
+
+		if left && !right {
+			return true
+		}
+		if !left && right {
+			return false
+		}
+
 		return entries[i].key < entries[j].key
 	})
+
+	used := map[string]struct{}{}
+	for i, e := range entries {
+		obj, ok := e.typ.(*tstypes.Object)
+
+		if !ok {
+			continue
+		}
+
+		pkg, strct := util.SplitPackegeStruct(obj.Name)
+		if _, ok := used[strct]; !ok {
+			g.altPkgs[obj.Name] = strct
+			used[strct] = struct{}{}
+			continue
+		}
+
+		p := util.GetPackageNameFromPath(pkg)
+		name := strcase.ToCamel(p + "_" + strct)
+
+		if _, ok := used[name]; !ok {
+			g.altPkgs[obj.Name] = name
+			used[name] = struct{}{}
+			continue
+		}
+
+		name = fmt.Sprintf("%s%03d", name, i)
+		g.altPkgs[obj.Name] = name
+		used[name] = struct{}{}
+	}
 
 	for _, e := range entries {
 		obj, ok := e.typ.(*tstypes.Object)
@@ -86,7 +132,7 @@ func (g *Generator) Generate() string {
 			continue
 		}
 
-		buf.WriteString("export type " + obj.Name + " = " + g.generateObject(obj, true) + "\n")
+		buf.WriteString("export type " + g.altPkgs[obj.Name] + " = " + g.generateObject(obj, true) + "\n")
 	}
 
 	return buf.String()

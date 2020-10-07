@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"golang.org/x/mod/modfile"
 )
@@ -54,4 +55,18 @@ func GetGoModule(goMod string) (string, error) {
 	}
 
 	return f.Module.Mod.Path, nil
+}
+
+// SplitPackegeStruct - package.structを分割
+func SplitPackegeStruct(s string) (string, string) {
+	idx := strings.LastIndex(s, ".")
+
+	return s[:idx], s[idx+1:]
+}
+
+// GetPackageNameFromPath - パスの最後の要素からパッケージ名を取得
+func GetPackageNameFromPath(s string) string {
+	arr := strings.Split(s, "/")
+
+	return arr[len(arr)-1]
 }
