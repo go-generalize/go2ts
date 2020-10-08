@@ -17,11 +17,14 @@ const (
 	Failure Status = "Failure"
 )
 
+type EmbeddedInt int
+
 type Data struct {
 	Time    tm.Time
 	Package *pkg.Package
 
 	Embedded
+	EmbeddedInt
 
 	A int
 	B *int `json:"b,omitempty"`

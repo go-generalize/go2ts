@@ -24,6 +24,9 @@ var (
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
 			Enum: []string{"Failure", "OK"},
 		},
+		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt": &tstypes.Number{
+			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+		},
 		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data": &tstypes.Object{
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data",
 			Entries: map[string]tstypes.ObjectEntry{
@@ -58,6 +61,11 @@ var (
 				"D": {
 					Type: &tstypes.Nullable{
 						Inner: &tstypes.Number{},
+					},
+				},
+				"EmbeddedInt": {
+					Type: &tstypes.Number{
+						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
 					},
 				},
 				"Array": {
@@ -143,6 +151,9 @@ var (
 				},
 			},
 		},
+		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt": &tstypes.Number{
+			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+		},
 		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data": &tstypes.Object{
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data",
 			Entries: map[string]tstypes.ObjectEntry{
@@ -178,6 +189,11 @@ var (
 				"D": {
 					Type: &tstypes.Nullable{
 						Inner: &tstypes.Number{},
+					},
+				},
+				"EmbeddedInt": {
+					Type: &tstypes.Number{
+						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
 					},
 				},
 				"Array": {
