@@ -109,6 +109,8 @@ func (p *Parser) parseNamed(t *types.Named, dep bool) tstypes.Type {
 		if ok {
 			return tt
 		}
+	} else if !dep {
+		return nil
 	}
 
 	typ := p.parseType(t.Underlying())
