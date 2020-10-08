@@ -1,0 +1,90 @@
+linters-settings:
+  dupl:
+    threshold: 100
+  errcheck:
+    check-type-assertions: true
+    ignore: fmt:.*,io/ioutil:^Read.*,io:Close,os:Close
+  goconst:
+    min-len: 2
+    min-occurrences: 2
+  goimports:
+    local-prefixes: github.com/golangci/golangci-lint
+  golint:
+    min-confidence: 0
+  govet:
+    check-shadowing: true
+
+  lll:
+    line-length: 120
+  misspell:
+    locale: US
+    ignore-words: []
+
+linters:
+  disable-all: true
+  enable:
+    # HTTPリクエストで閉じられていないものを検出
+    - bodyclose
+    # 使われていないコードを検出
+    - deadcode
+    # _, _ := x() のようなものを検出
+    - dogsled
+    # 同一コードの検出
+    - dupl
+    # エラーを未チェックのものを検出
+    - errcheck
+    # 定数化できるものを検出
+    - goconst
+    # gofmt
+    - gofmt
+    # goimports
+    - goimports
+    # golint
+    - golint
+    # 引数がフォーマット文字列と一致しないものを検出
+    - govet
+    # 意味のない再代入を検出
+    - ineffassign
+    # 1行の最大長が長すぎるものを検出
+    - lll
+    # スペルチェック
+    - misspell
+    # for中などで固定されてない変数を検出
+    - scopelint
+    # 構造体の未使用フィールドを検出
+    - structcheck
+    # 不要な型変換を検出
+    - unconvert
+    # 未使用のものを検出
+    - unused
+    # 未使用のグローバル変数・定数を検出
+    - varcheck
+    # 前後の余計な空白を検出
+    - whitespace
+
+issues:
+  exclude:
+  - declaration of "(err|ctx)" shadows declaration at
+  exclude-use-default: false
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gomnd
+        - dupl
+
+    - linters:
+        - lll
+      source: "//go:generate "
+
+run:
+  skip-dirs:
+    - example
+    - test/testdata_etc
+    - internal/cache
+    - internal/renameio
+    - internal/robustio
+
+service:
+  golangci-lint-version: 1.23.x
+  prepare:
+    - echo "here I can run custom commands, but no preparation needed for this repo"
