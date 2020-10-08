@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"reflect"
 
-	tstypes "github.com/go-generalize/go2ts/pkg/types"
-	"github.com/go-generalize/go2ts/pkg/util"
+	tstypes "github.com/go-generalize/go2ts/v2/pkg/types"
+	"github.com/go-generalize/go2ts/v2/pkg/util"
 	"golang.org/x/tools/go/packages"
 )
 

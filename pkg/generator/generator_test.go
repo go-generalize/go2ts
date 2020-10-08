@@ -5,14 +5,14 @@ import (
 	"io/ioutil"
 	"testing"
 
-	tstypes "github.com/go-generalize/go2ts/pkg/types"
+	tstypes "github.com/go-generalize/go2ts/v2/pkg/types"
 	"github.com/google/go-cmp/cmp"
 )
 
 var (
 	successParsedTypes = map[string]tstypes.Type{
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Embedded": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Embedded",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Embedded": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Embedded",
 			Entries: map[string]tstypes.ObjectEntry{
 				"foo": {
 					Optional: true,
@@ -20,12 +20,12 @@ var (
 				},
 			},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status": &tstypes.String{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status": &tstypes.String{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status",
 			Enum: []string{"Failure", "OK"},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Data": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Data",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Time": {
 					Type: &tstypes.Date{},
@@ -71,14 +71,14 @@ var (
 					Type: &tstypes.Map{
 						Key: &tstypes.String{},
 						Value: &tstypes.String{
-							Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
+							Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status",
 							Enum: []string{"Failure", "OK"},
 						},
 					},
 				},
 				"Status": {
 					Type: &tstypes.String{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
+						Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status",
 						Enum: []string{"Failure", "OK"},
 					},
 				},
@@ -106,12 +106,12 @@ var (
 	}
 
 	conflictingData = map[string]tstypes.Type{
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Data": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Data",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict.Data": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict.Data",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Hoge": {
 					Type: &tstypes.Object{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Hoge",
+						Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict.Hoge",
 						Entries: map[string]tstypes.ObjectEntry{
 							"Data": {
 								Type: &tstypes.Number{},
@@ -121,7 +121,7 @@ var (
 				},
 				"PkgHoge": {
 					Type: &tstypes.Object{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/pkg.Hoge",
+						Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict/pkg.Hoge",
 						Entries: map[string]tstypes.ObjectEntry{
 							"Data": {
 								Type: &tstypes.Number{},
@@ -131,16 +131,16 @@ var (
 				},
 			},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Hoge": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Hoge",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict.Hoge": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict.Hoge",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Data": {
 					Type: &tstypes.Number{},
 				},
 			},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/pkg.Hoge": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/pkg.Hoge",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict/pkg.Hoge": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict/pkg.Hoge",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Data": {
 					Type: &tstypes.Number{},
@@ -178,7 +178,7 @@ func TestGenerator_Generate(t *testing.T) {
 			fields: fields{
 				types:       successParsedTypes,
 				altPkgs:     map[string]string{},
-				BasePackage: "github.com/go-generalize/go2ts/pkg/parser/testdata/success",
+				BasePackage: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success",
 			},
 		},
 		{
@@ -187,7 +187,7 @@ func TestGenerator_Generate(t *testing.T) {
 			fields: fields{
 				types:       conflictingData,
 				altPkgs:     map[string]string{},
-				BasePackage: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict",
+				BasePackage: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict",
 			},
 		},
 	}

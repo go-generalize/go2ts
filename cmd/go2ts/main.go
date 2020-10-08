@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/go-generalize/go2ts/pkg/generator"
-	"github.com/go-generalize/go2ts/pkg/parser"
+	"github.com/go-generalize/go2ts/v2/pkg/generator"
+	"github.com/go-generalize/go2ts/v2/pkg/parser"
 )
 
 func main() {

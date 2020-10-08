@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strconv"
 
-	tstypes "github.com/go-generalize/go2ts/pkg/types"
+	tstypes "github.com/go-generalize/go2ts/v2/pkg/types"
 )
 
 func (p *Parser) addCandidates(typ string, val interface{}) {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/pkg"
+	"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict/pkg"
 )
 
 type Data struct {

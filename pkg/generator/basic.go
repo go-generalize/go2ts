@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	tstypes "github.com/go-generalize/go2ts/pkg/types"
+	tstypes "github.com/go-generalize/go2ts/v2/pkg/types"
 )
 
 func quoteAll(s []string) []string {

@@ -1,4 +1,4 @@
-module github.com/go-generalize/go2ts
+module github.com/go-generalize/go2ts/v2
 
 go 1.15
 

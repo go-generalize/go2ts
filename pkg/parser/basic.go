@@ -4,7 +4,7 @@ import (
 	"go/types"
 	"reflect"
 
-	tstypes "github.com/go-generalize/go2ts/pkg/types"
+	tstypes "github.com/go-generalize/go2ts/v2/pkg/types"
 )
 
 func (p *Parser) parseBasic(t *types.Basic) tstypes.Type {

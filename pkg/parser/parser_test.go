@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"testing"
 
-	tstypes "github.com/go-generalize/go2ts/pkg/types"
+	tstypes "github.com/go-generalize/go2ts/v2/pkg/types"
 	"github.com/google/go-cmp/cmp"
 	"golang.org/x/tools/go/packages"
 )
 
 var (
 	successParsedTypes = map[string]tstypes.Type{
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Embedded": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Embedded",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Embedded": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Embedded",
 			Entries: map[string]tstypes.ObjectEntry{
 				"foo": {
 					Optional: true,
@@ -20,15 +20,15 @@ var (
 				},
 			},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status": &tstypes.String{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status": &tstypes.String{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status",
 			Enum: []string{"Failure", "OK"},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt": &tstypes.Number{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.EmbeddedInt": &tstypes.Number{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.EmbeddedInt",
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Data": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Data",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Time": {
 					Type: &tstypes.Date{},
@@ -65,7 +65,7 @@ var (
 				},
 				"EmbeddedInt": {
 					Type: &tstypes.Number{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+						Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.EmbeddedInt",
 					},
 				},
 				"Array": {
@@ -79,14 +79,14 @@ var (
 					Type: &tstypes.Map{
 						Key: &tstypes.String{},
 						Value: &tstypes.String{
-							Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
+							Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status",
 							Enum: []string{"Failure", "OK"},
 						},
 					},
 				},
 				"Status": {
 					Type: &tstypes.String{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
+						Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status",
 						Enum: []string{"Failure", "OK"},
 					},
 				},
@@ -114,8 +114,8 @@ var (
 	}
 
 	successAllExportedParsedTypes = map[string]tstypes.Type{
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Embedded": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Embedded",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Embedded": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Embedded",
 			Entries: map[string]tstypes.ObjectEntry{
 				"foo": {
 					Optional: true,
@@ -123,39 +123,39 @@ var (
 				},
 			},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status": &tstypes.String{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status": &tstypes.String{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status",
 			Enum: []string{"Failure", "OK"},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.foo": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.foo",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.foo": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.foo",
 			Entries: map[string]tstypes.ObjectEntry{
 				"V": {
 					Type: &tstypes.Number{},
 				},
 			},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success/pkg.Package": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/pkg.Package",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success/pkg.Package": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success/pkg.Package",
 			Entries: map[string]tstypes.ObjectEntry{
 				"data": {
 					Type: &tstypes.Number{},
 				},
 			},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Unexported": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Unexported",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Unexported": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Unexported",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Data": {
 					Type: &tstypes.Number{},
 				},
 			},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt": &tstypes.Number{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.EmbeddedInt": &tstypes.Number{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.EmbeddedInt",
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Data": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Data",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Time": {
 					Type: &tstypes.Date{},
@@ -163,7 +163,7 @@ var (
 				"Package": {
 					Type: &tstypes.Nullable{
 						Inner: &tstypes.Object{
-							Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/pkg.Package",
+							Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success/pkg.Package",
 							Entries: map[string]tstypes.ObjectEntry{
 								"data": {
 									Type: &tstypes.Number{},
@@ -193,7 +193,7 @@ var (
 				},
 				"EmbeddedInt": {
 					Type: &tstypes.Number{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+						Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.EmbeddedInt",
 					},
 				},
 				"Array": {
@@ -207,21 +207,21 @@ var (
 					Type: &tstypes.Map{
 						Key: &tstypes.String{},
 						Value: &tstypes.String{
-							Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
+							Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status",
 							Enum: []string{"Failure", "OK"},
 						},
 					},
 				},
 				"Status": {
 					Type: &tstypes.String{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
+						Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Status",
 						Enum: []string{"Failure", "OK"},
 					},
 				},
 				"Foo": {
 					Optional: true,
 					Type: &tstypes.Object{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.foo",
+						Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.foo",
 						Entries: map[string]tstypes.ObjectEntry{
 							"V": {
 								Type: &tstypes.Number{},
@@ -231,7 +231,7 @@ var (
 				},
 				"U": {
 					Type: &tstypes.Object{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Unexported",
+						Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success.Unexported",
 						Entries: map[string]tstypes.ObjectEntry{
 							"Data": {
 								Type: &tstypes.Number{},
@@ -244,12 +244,12 @@ var (
 	}
 
 	conflictingData = map[string]tstypes.Type{
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Data": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Data",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict.Data": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict.Data",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Hoge": {
 					Type: &tstypes.Object{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Hoge",
+						Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict.Hoge",
 						Entries: map[string]tstypes.ObjectEntry{
 							"Data": {
 								Type: &tstypes.Number{},
@@ -259,7 +259,7 @@ var (
 				},
 				"PkgHoge": {
 					Type: &tstypes.Object{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/pkg.Hoge",
+						Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict/pkg.Hoge",
 						Entries: map[string]tstypes.ObjectEntry{
 							"Data": {
 								Type: &tstypes.Number{},
@@ -269,16 +269,16 @@ var (
 				},
 			},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Hoge": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Hoge",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict.Hoge": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict.Hoge",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Data": {
 					Type: &tstypes.Number{},
 				},
 			},
 		},
-		"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/pkg.Hoge": &tstypes.Object{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/pkg.Hoge",
+		"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict/pkg.Hoge": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/conflict/pkg.Hoge",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Data": {
 					Type: &tstypes.Number{},
@@ -301,7 +301,7 @@ func parse(t *testing.T, dir string) []*packages.Package {
 }
 
 func TestParser_Parse(t *testing.T) {
-	base := "github.com/go-generalize/go2ts/pkg/parser/testdata/success"
+	base := "github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success"
 
 	type fields struct {
 		pkgs        []*packages.Package

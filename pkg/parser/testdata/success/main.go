@@ -3,7 +3,7 @@ package main
 import (
 	tm "time"
 
-	"github.com/go-generalize/go2ts/pkg/parser/testdata/success/pkg"
+	"github.com/go-generalize/go2ts/v2/pkg/parser/testdata/success/pkg"
 )
 
 type Embedded struct {
