@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"strings"
+	"fmt"
 	"testing"
 
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
@@ -291,7 +291,7 @@ var (
 func parse(t *testing.T, dir string) []*packages.Package {
 	t.Helper()
 
-	parser, err := NewParser(dir)
+	parser, err := NewParser(dir, All)
 
 	if err != nil {
 		t.Fatalf("failed to initialize parser: %+v", err)
@@ -304,13 +304,11 @@ func TestParser_Parse(t *testing.T) {
 	base := "github.com/go-generalize/go2ts/pkg/parser/testdata/success"
 
 	type fields struct {
-		pkgs             []*packages.Package
-		types            map[string]tstypes.Type
-		consts           map[string][]interface{}
-		BasePackage      string
-		Filter           func(name string) bool
-		ExportAll        bool
-		ExportUnexported bool
+		pkgs        []*packages.Package
+		types       map[string]tstypes.Type
+		consts      map[string][]interface{}
+		basePackage string
+		Filter      func(opt *FilterOpt) bool
 	}
 	tests := []struct {
 		name    string
@@ -322,11 +320,17 @@ func TestParser_Parse(t *testing.T) {
 			name: "success",
 			fields: fields{
 				pkgs: parse(t, "./testdata/success"),
-				Filter: func(name string) bool {
-					t.Log("checking export status: ", name)
-					return !strings.HasSuffix(name, ".Unexported")
+				Filter: func(opt *FilterOpt) bool {
+					fmt.Println(opt)
+					if !Default(opt) {
+						return false
+					}
+					fmt.Println("ok")
+
+					t.Log("checking export status: ", opt.Name)
+					return opt.Name != "Unexported"
 				},
-				BasePackage: base,
+				basePackage: base,
 			},
 			wantRes: successParsedTypes,
 			wantErr: false,
@@ -335,8 +339,8 @@ func TestParser_Parse(t *testing.T) {
 			name: "all exported",
 			fields: fields{
 				pkgs:        parse(t, "./testdata/success"),
-				BasePackage: base,
-				ExportAll:   true,
+				basePackage: base,
+				Filter:      All,
 			},
 			wantRes: successAllExportedParsedTypes,
 			wantErr: false,
@@ -345,8 +349,8 @@ func TestParser_Parse(t *testing.T) {
 			name: "conflicting",
 			fields: fields{
 				pkgs:        parse(t, "./testdata/conflict"),
-				BasePackage: base,
-				ExportAll:   true,
+				basePackage: base,
+				Filter:      All,
 			},
 			wantRes: conflictingData,
 			wantErr: false,
@@ -354,8 +358,7 @@ func TestParser_Parse(t *testing.T) {
 		{
 			name: "unsupported_map_key",
 			fields: fields{
-				pkgs:        parse(t, "./testdata/unsupported_map_key"),
-				BasePackage: base,
+				pkgs: parse(t, "./testdata/unsupported_map_key"),
 			},
 			wantErr: true,
 		},
@@ -363,13 +366,11 @@ func TestParser_Parse(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := &Parser{
-				pkgs:             tt.fields.pkgs,
-				types:            tt.fields.types,
-				consts:           tt.fields.consts,
-				BasePackage:      tt.fields.BasePackage,
-				Filter:           tt.fields.Filter,
-				ExportAll:        tt.fields.ExportAll,
-				ExportUnexported: tt.fields.ExportUnexported,
+				pkgs:        tt.fields.pkgs,
+				types:       tt.fields.types,
+				consts:      tt.fields.consts,
+				basePackage: tt.fields.basePackage,
+				Filter:      tt.fields.Filter,
 			}
 			gotRes, err := p.Parse()
 			if (err != nil) != tt.wantErr {

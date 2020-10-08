@@ -14,13 +14,11 @@ import (
 type Parser struct {
 	pkgs []*packages.Package
 
-	types  map[string]tstypes.Type
-	consts map[string][]interface{}
+	types       map[string]tstypes.Type
+	consts      map[string][]interface{}
+	basePackage string
 
-	BasePackage      string
-	Filter           func(name string) bool
-	ExportAll        bool
-	ExportUnexported bool
+	Filter func(opt *FilterOpt) bool
 }
 
 func getPackagePath(dir string) (root string, pkg string, err error) {
@@ -52,7 +50,7 @@ func getPackagePath(dir string) (root string, pkg string, err error) {
 	return goModDir, filepath.Join(mod, "/"+rel), nil
 }
 
-func NewParser(dir string) (*Parser, error) {
+func NewParser(dir string, filter func(*FilterOpt) bool) (*Parser, error) {
 	root, pkg, err := getPackagePath(dir)
 
 	if err != nil {
@@ -76,43 +74,34 @@ func NewParser(dir string) (*Parser, error) {
 
 	return &Parser{
 		pkgs:        pkgs,
-		BasePackage: pkg,
+		basePackage: pkg,
+		Filter:      filter,
 	}, nil
 }
 
-func (p *Parser) exported(t *types.Named) bool {
-	if p.ExportAll {
-		return true
+func (p *Parser) exported(t *types.Named, dep bool) bool {
+	opt := &FilterOpt{
+		BasePackage: false,
+		Package:     t.Obj().Pkg().String(),
+		Name:        t.Obj().Name(),
+		Exported:    t.Obj().Exported(),
+		Dependency:  dep,
 	}
-
-	if !p.ExportUnexported && !t.Obj().Exported() {
-		return false
-	}
-
-	flag := false
 	packages.Visit(p.pkgs, nil, func(pkg *packages.Package) {
 		if pkg.Types.Scope() == t.Obj().Parent() {
-			flag = true
+			opt.BasePackage = true
 		}
 	})
 
-	if !flag {
-		return false
-	}
-
-	if p.Filter != nil && !p.Filter(t.String()) {
-		return false
-	}
-
-	return true
+	return p.Filter(opt)
 }
 
-func (p *Parser) parseNamed(t *types.Named) tstypes.Type {
+func (p *Parser) parseNamed(t *types.Named, dep bool) tstypes.Type {
 	if t.String() == "time.Time" {
 		return &tstypes.Date{}
 	}
 
-	exported := p.exported(t)
+	exported := p.exported(t, dep)
 
 	if exported {
 		tt, ok := p.types[t.String()]
@@ -184,7 +173,7 @@ func (p *Parser) parseType(u types.Type) tstypes.Type {
 	var typ tstypes.Type
 	switch u := u.(type) {
 	case *types.Named:
-		typ = p.parseNamed(u)
+		typ = p.parseNamed(u, true)
 	case *types.Struct:
 		typ = p.parseStruct(u)
 	case *types.Basic:
@@ -250,17 +239,26 @@ func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
 				continue
 			}
 
-			if v, ok := obj.(*types.TypeName); ok && !v.IsAlias() {
-				if p.Filter != nil && !p.Filter(v.Type().String()) {
-					continue
-				}
-
-				p.parseType(v.Type())
+			v, ok := obj.(*types.TypeName)
+			if !(ok && !v.IsAlias()) {
+				continue
 			}
+
+			t, ok := v.Type().(*types.Named)
+
+			if !ok {
+				continue
+			}
+
+			p.parseNamed(t, false)
 		}
 	})
 
 	p.sortConst()
 
 	return p.types, nil
+}
+
+func (p *Parser) GetBasePackage() string {
+	return p.basePackage
 }
