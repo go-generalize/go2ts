@@ -8,7 +8,7 @@ type FilterOpt struct {
 	// Dependency - 他のstructから依存されている場合にtrueとなる
 	// 同じstructに対して複数回呼ばれ、依存されていない状況ではfalseとして呼ばれる可能性がある
 	// 一度でもtrueとして返せば出力される
-	// dependencyがtrueの時にtrueを返す場合、falseでも常にtrueを返すべきである
+	// dependencyがfalseの時にtrueを返す場合、trueでも常にtrueを返すべきである
 	Dependency bool
 }
 
