@@ -16,7 +16,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	parser, err := parser.NewParser(os.Args[1])
+	parser, err := parser.NewParser(os.Args[1], parser.Default)
 
 	if err != nil {
 		panic(err)
