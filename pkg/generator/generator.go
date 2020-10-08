@@ -66,9 +66,6 @@ func (g *Generator) generateType(t tstypes.Type) string {
 func (g *Generator) Generate() string {
 	buf := bytes.NewBuffer(nil)
 
-	type typesType struct {
-	}
-
 	type entry struct {
 		key string
 		typ tstypes.Type
