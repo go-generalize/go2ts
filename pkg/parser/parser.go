@@ -117,7 +117,7 @@ func (p *Parser) parseNamed(t *types.Named, dep bool) tstypes.Type {
 
 	if exported {
 		if typ, ok := typ.(tstypes.Enumerable); ok {
-			consts, _ := p.consts[t.String()]
+			consts := p.consts[t.String()]
 
 			for i := range consts {
 				typ.AddCandidates(consts[i])

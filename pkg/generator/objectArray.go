@@ -51,7 +51,7 @@ func (g *Generator) generateObject(obj *tstypes.Object, root bool) string {
 		return "{}"
 	}
 
-	buf.WriteString(fmt.Sprintf("{\n"))
+	buf.WriteString("{\n")
 
 	for _, e := range entries {
 		if e.Optional {
@@ -61,7 +61,7 @@ func (g *Generator) generateObject(obj *tstypes.Object, root bool) string {
 		}
 	}
 
-	buf.WriteString(fmt.Sprintf("}"))
+	buf.WriteString("}")
 
 	return buf.String()
 }

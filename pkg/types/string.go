@@ -18,11 +18,7 @@ var _ NamedType = &String{}
 var _ Enumerable = &String{}
 
 func (e *String) UsedAsMapKey() bool {
-	if len(e.Enum) != 0 {
-		return false
-	}
-
-	return true
+	return len(e.Enum) == 0
 }
 
 func (n *String) AddCandidates(v interface{}) {
