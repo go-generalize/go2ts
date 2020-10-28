@@ -1,3 +1,4 @@
+// Package parser provides a Go module parser for TypeScript AST
 package parser
 
 import (
@@ -6,6 +7,10 @@ import (
 	"strings"
 
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
+)
+
+const (
+	jsonTagOmitempty = "omitempty"
 )
 
 func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
@@ -27,7 +32,7 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 		if len(jsonTag) >= 1 {
 			field = jsonTag[0]
 		}
-		optional := len(jsonTag) >= 2 && jsonTag[1] == "omitempty"
+		optional := len(jsonTag) >= 2 && jsonTag[1] == jsonTagOmitempty
 
 		if field == "-" {
 			continue
@@ -66,7 +71,7 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 		if len(jsonTag) >= 1 {
 			field = jsonTag[0]
 		}
-		optional := len(jsonTag) >= 2 && jsonTag[1] == "omitempty"
+		optional := len(jsonTag) >= 2 && jsonTag[1] == jsonTagOmitempty
 
 		if field == "-" {
 			continue
@@ -88,7 +93,6 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 				Optional: false,
 			}
 		}
-
 	}
 
 	return &obj

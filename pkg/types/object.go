@@ -1,3 +1,4 @@
+// Package types contains structs/interfaces representing TypeScript types
 package types
 
 import (
@@ -6,11 +7,13 @@ import (
 	"strings"
 )
 
+// ObjectEntry is an field in objects
 type ObjectEntry struct {
 	Type     Type
 	Optional bool
 }
 
+// Object - {field1: ..., field2: ...} in TypeScript
 type Object struct {
 	Name string
 
@@ -20,14 +23,17 @@ type Object struct {
 var _ Type = &Object{}
 var _ NamedType = &Object{}
 
-func (e *Object) UsedAsMapKey() bool {
+// UsedAsMapKey returns whether this type can be used as the key for map
+func (n *Object) UsedAsMapKey() bool {
 	return false
 }
 
+// SetName sets a alternative name
 func (n *Object) SetName(name string) {
 	n.Name = name
 }
 
+// String returns this type in string representation
 func (n *Object) String() string {
 	buf := bytes.NewBuffer(nil)
 

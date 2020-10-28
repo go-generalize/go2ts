@@ -1,3 +1,4 @@
+// Package generator is TypeScript generator from AST
 package generator
 
 import (

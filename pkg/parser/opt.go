@@ -1,5 +1,7 @@
+// Package parser provides a Go module parser for TypeScript AST
 package parser
 
+// FilterOpt is options to filter exported interfaces
 type FilterOpt struct {
 	BasePackage bool
 	Package     string
@@ -12,6 +14,7 @@ type FilterOpt struct {
 	Dependency bool
 }
 
+// Default exports all other than neither in base-package nor exported
 var Default = func(opt *FilterOpt) bool {
 	if !opt.BasePackage {
 		return false
@@ -24,6 +27,7 @@ var Default = func(opt *FilterOpt) bool {
 	return true
 }
 
+// All exports all interfaces
 var All = func(opt *FilterOpt) bool {
 	return true
 }

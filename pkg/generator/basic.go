@@ -1,3 +1,4 @@
+// Package generator is a generator for TypeScript interfaces
 package generator
 
 import (
@@ -6,6 +7,14 @@ import (
 	"strings"
 
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
+)
+
+const (
+	tsString  = "string"
+	tsNumber  = "number"
+	tsBoolean = "boolean"
+	tsAny     = "any"
+	tsNull    = "null"
 )
 
 func quoteAll(s []string) []string {
@@ -23,7 +32,7 @@ func (g *Generator) generateString(t *tstypes.String) string {
 		return strings.Join(quoteAll(t.Enum), " | ")
 	}
 
-	return "string"
+	return tsString
 }
 
 func (g *Generator) generateNumber(t *tstypes.Number) string {
@@ -41,21 +50,21 @@ func (g *Generator) generateNumber(t *tstypes.Number) string {
 		return buf.String()
 	}
 
-	return "number"
+	return tsNumber
 }
 
 func (g *Generator) generateBoolean(t *tstypes.Boolean) string {
-	return "boolean"
+	return tsBoolean
 }
 
 func (g *Generator) generateDate(t *tstypes.Date) string {
-	return "string"
+	return tsString
 }
 
 func (g *Generator) generateNullable(t *tstypes.Nullable) string {
-	return g.generateType(t.Inner) + " | null"
+	return g.generateType(t.Inner) + " | " + tsNull
 }
 
 func (g *Generator) generateAny(t *tstypes.Any) string {
-	return "any"
+	return tsAny
 }

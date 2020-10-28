@@ -1,3 +1,4 @@
+// Package generator is TypeScript generator from AST
 package generator
 
 import (
@@ -11,6 +12,7 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
+// Generator is a generator for TypeScript interfaces
 type Generator struct {
 	types   map[string]tstypes.Type
 	altPkgs map[string]string
@@ -18,6 +20,7 @@ type Generator struct {
 	BasePackage string
 }
 
+// NewGenerator returns a new Generator
 func NewGenerator(types map[string]tstypes.Type) *Generator {
 	return &Generator{
 		types:   types,
@@ -63,6 +66,7 @@ func (g *Generator) generateType(t tstypes.Type) string {
 	}
 }
 
+// Generate returns generated TypeScript code
 func (g *Generator) Generate() string {
 	buf := bytes.NewBuffer(nil)
 
