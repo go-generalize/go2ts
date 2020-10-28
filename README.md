@@ -3,7 +3,7 @@
 
 ## What is go2ts?
 - go2ts is a TypeScript interface generator from Go struct.
-- Automatically recognize 
+- Automatically recognize the Go module in the directory
 
 ## Installation
 ```console
