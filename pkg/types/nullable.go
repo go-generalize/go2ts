@@ -1,15 +1,19 @@
+// Package types contains structs/interfaces representing TypeScript types
 package types
 
+// Nullable - ... | null
 type Nullable struct {
 	Inner Type
 }
 
 var _ Type = &Nullable{}
 
+// UsedAsMapKey returns whether this type can be used as the key for map
 func (e *Nullable) UsedAsMapKey() bool {
 	return false
 }
 
-func (n *Nullable) String() string {
-	return "Nullable(" + n.Inner.String() + ")"
+// String returns this type in string representation
+func (e *Nullable) String() string {
+	return "Nullable(" + e.Inner.String() + ")"
 }

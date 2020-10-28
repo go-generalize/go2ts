@@ -1,3 +1,4 @@
+// Package types contains structs/interfaces representing TypeScript types
 package types
 
 import (
@@ -7,6 +8,7 @@ import (
 	"strings"
 )
 
+// String - string in TypeScript
 type String struct {
 	Name string
 
@@ -17,10 +19,12 @@ var _ Type = &String{}
 var _ NamedType = &String{}
 var _ Enumerable = &String{}
 
-func (e *String) UsedAsMapKey() bool {
-	return len(e.Enum) == 0
+// UsedAsMapKey returns whether this type can be used as the key for map
+func (n *String) UsedAsMapKey() bool {
+	return len(n.Enum) == 0
 }
 
+// AddCandidates adds an candidate for enum
 func (n *String) AddCandidates(v interface{}) {
 	switch v := v.(type) {
 	case string:
@@ -30,10 +34,12 @@ func (n *String) AddCandidates(v interface{}) {
 	}
 }
 
+// SetName sets a alternative name
 func (n *String) SetName(name string) {
 	n.Name = name
 }
 
+// String returns this type in string representation
 func (n *String) String() string {
 	buf := bytes.NewBuffer(nil)
 

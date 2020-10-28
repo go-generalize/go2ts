@@ -1,3 +1,4 @@
+// Package parser provides a Go module parser for TypeScript AST
 package parser
 
 import (
@@ -11,6 +12,7 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
+// Parser is a Go module parser for TypeScript AST
 type Parser struct {
 	pkgs []*packages.Package
 
@@ -50,6 +52,7 @@ func getPackagePath(dir string) (root string, pkg string, err error) {
 	return goModDir, filepath.Join(mod, "/"+rel), nil
 }
 
+// NewParser initializes a new Parser
 func NewParser(dir string, filter func(*FilterOpt) bool) (*Parser, error) {
 	root, pkg, err := getPackagePath(dir)
 
@@ -197,6 +200,7 @@ func (p *Parser) parseType(u types.Type) tstypes.Type {
 	return typ
 }
 
+// Parse parses the Go module and returns ASTs
 func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
 	defer func() {
 		if e := recover(); e != nil {
@@ -261,6 +265,7 @@ func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
 	return p.types, nil
 }
 
+// GetBasePackage returns a base module for the root package
 func (p *Parser) GetBasePackage() string {
 	return p.basePackage
 }

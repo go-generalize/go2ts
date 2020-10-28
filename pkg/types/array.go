@@ -1,15 +1,19 @@
+// Package types contains structs/interfaces representing TypeScript types
 package types
 
+// Array - array in TypeScript
 type Array struct {
 	Inner Type
 }
 
 var _ Type = &Array{}
 
-func (e *Array) UsedAsMapKey() bool {
+// UsedAsMapKey returns whether this type can be used as the key for map
+func (a *Array) UsedAsMapKey() bool {
 	return false
 }
 
-func (n *Array) String() string {
-	return "Array(" + n.Inner.String() + ")"
+// String returns this type in string representation
+func (a *Array) String() string {
+	return "Array(" + a.Inner.String() + ")"
 }

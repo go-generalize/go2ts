@@ -1,3 +1,4 @@
+// Package main is a CLI for go2ts
 package main
 
 import (

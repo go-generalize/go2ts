@@ -1,3 +1,4 @@
+// Package util is a helper library for go2ts
 package util
 
 import (

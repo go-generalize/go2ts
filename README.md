@@ -2,7 +2,8 @@
 [![PkgGoDev](https://pkg.go.dev/badge/go-generalize/go2ts)](https://pkg.go.dev/go-generalize/go2ts)
 
 ## What is go2ts?
-go2ts is a TypeScript interface generator from Go struct.
+- go2ts is a TypeScript interface generator from Go struct.
+- Automatically recognize the Go module in the directory
 
 ## Installation
 ```console

@@ -1,3 +1,4 @@
+// Package parser provides a Go module parser for TypeScript AST
 package parser
 
 import (

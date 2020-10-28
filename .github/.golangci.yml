@@ -49,8 +49,6 @@ linters:
     - lll
     # スペルチェック
     - misspell
-    # for中などで固定されてない変数を検出
-    - scopelint
     # 構造体の未使用フィールドを検出
     - structcheck
     # 不要な型変換を検出
