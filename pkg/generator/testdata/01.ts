@@ -7,6 +7,7 @@ export type Data = {
 		V: number;
 	};
 	Map: {[key: string]: "Failure" | "OK"};
+	OptionalArray: (string | null)[];
 	Package: {
 		data: number;
 	} | null;

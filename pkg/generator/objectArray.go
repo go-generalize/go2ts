@@ -5,12 +5,19 @@ import (
 	"bytes"
 	"fmt"
 	"sort"
+	"strings"
 
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
 )
 
 func (g *Generator) generateArray(typ *tstypes.Array) string {
-	return g.generateType(typ.Inner) + "[]"
+	inner := g.generateType(typ.Inner)
+
+	if strings.HasSuffix(inner, " | "+tsNull) {
+		return fmt.Sprintf("(%s)[]", inner)
+	}
+
+	return inner + "[]"
 }
 
 func (g *Generator) generateMap(obj *tstypes.Map) string {

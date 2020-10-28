@@ -76,6 +76,13 @@ var (
 						},
 					},
 				},
+				"OptionalArray": {
+					Type: &tstypes.Array{
+						Inner: &tstypes.Nullable{
+							Inner: &tstypes.String{},
+						},
+					},
+				},
 				"Status": {
 					Type: &tstypes.String{
 						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
