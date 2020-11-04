@@ -126,6 +126,7 @@ func (p *Parser) parseNamed(t *types.Named, dep bool) tstypes.Type {
 	typ := p.parseType(t.Underlying())
 
 	if dummy != nil {
+		//nolint
 		obj := typ.(*tstypes.Object)
 
 		dummy.Entries = obj.Entries

@@ -167,6 +167,7 @@ var (
 )
 
 func init() {
+	//nolint
 	re := recursiveData["github.com/go-generalize/go2ts/pkg/parser/testdata/recursive.Recursive"].(*tstypes.Object)
 
 	re.Entries["Re"] = tstypes.ObjectEntry{
