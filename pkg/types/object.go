@@ -1,12 +1,6 @@
 // Package types contains structs/interfaces representing TypeScript types
 package types
 
-import (
-	"bytes"
-	"fmt"
-	"strings"
-)
-
 // ObjectEntry is an field in objects
 type ObjectEntry struct {
 	Type     Type
@@ -35,19 +29,5 @@ func (n *Object) SetName(name string) {
 
 // String returns this type in string representation
 func (n *Object) String() string {
-	buf := bytes.NewBuffer(nil)
-
-	buf.WriteString("Object")
-
-	arr := make([]string, 0, len(n.Entries))
-
-	for key, val := range n.Entries {
-		arr = append(arr, fmt.Sprintf("%s:%s", key, val.Type.String()))
-	}
-
-	buf.WriteString("{")
-	buf.WriteString(strings.Join(arr, ","))
-	buf.WriteString("}")
-
-	return buf.String()
+	return "Object{...}"
 }

@@ -112,6 +112,15 @@ var (
 		},
 	}
 
+	recursiveData = map[string]tstypes.Type{
+		"github.com/go-generalize/go2ts/pkg/parser/testdata/recursive.Recursive": &tstypes.Object{
+			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/recursive.Recursive",
+			Entries: map[string]tstypes.ObjectEntry{
+				"Re": {}, // Overwritten by init()
+			},
+		},
+	}
+
 	conflictingData = map[string]tstypes.Type{
 		"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Data": &tstypes.Object{
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Data",
@@ -157,6 +166,17 @@ var (
 	}
 )
 
+func init() {
+	//nolint
+	re := recursiveData["github.com/go-generalize/go2ts/pkg/parser/testdata/recursive.Recursive"].(*tstypes.Object)
+
+	re.Entries["Re"] = tstypes.ObjectEntry{
+		Type: &tstypes.Nullable{
+			Inner: re,
+		},
+	}
+}
+
 func loadFile(t *testing.T, name string) string {
 	t.Helper()
 
@@ -195,6 +215,15 @@ func TestGenerator_Generate(t *testing.T) {
 				types:       conflictingData,
 				altPkgs:     map[string]string{},
 				BasePackage: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict",
+			},
+		},
+		{
+			name: "03",
+			want: loadFile(t, "./testdata/03.ts"),
+			fields: fields{
+				types:       recursiveData,
+				altPkgs:     map[string]string{},
+				BasePackage: "github.com/go-generalize/go2ts/pkg/parser/testdata/recursive",
 			},
 		},
 	}
