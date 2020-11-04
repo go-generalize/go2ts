@@ -116,7 +116,21 @@ func (p *Parser) parseNamed(t *types.Named, dep bool) tstypes.Type {
 		return nil
 	}
 
+	// For recursive references to the same struct
+	var dummy *tstypes.Object
+	if exported && p.isStruct(t.Underlying()) {
+		dummy = &tstypes.Object{}
+		p.types[t.String()] = dummy
+	}
+
 	typ := p.parseType(t.Underlying())
+
+	if dummy != nil {
+		obj := typ.(*tstypes.Object)
+
+		dummy.Entries = obj.Entries
+		typ = dummy
+	}
 
 	if exported {
 		if typ, ok := typ.(tstypes.Enumerable); ok {
@@ -172,6 +186,12 @@ func (p *Parser) parseMap(u *types.Map) tstypes.Type {
 
 func (p *Parser) parseInterface(u *types.Interface) tstypes.Type {
 	return &tstypes.Any{}
+}
+
+func (p *Parser) isStruct(u types.Type) bool {
+	_, ok := u.(*types.Struct)
+
+	return ok
 }
 
 func (p *Parser) parseType(u types.Type) tstypes.Type {
