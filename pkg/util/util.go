@@ -2,6 +2,7 @@
 package util
 
 import (
+	"crypto/sha1"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -70,4 +71,11 @@ func GetPackageNameFromPath(s string) string {
 	arr := strings.Split(s, "/")
 
 	return arr[len(arr)-1]
+}
+
+// SHA1 generate SHA1 in hex encoding from s
+func SHA1(s string) string {
+	hash := sha1.Sum([]byte(s))
+
+	return fmt.Sprintf("%x", hash[:])
 }

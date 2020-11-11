@@ -98,7 +98,7 @@ func (g *Generator) Generate() string {
 	})
 
 	used := map[string]struct{}{}
-	for i, e := range entries {
+	for _, e := range entries {
 		obj, ok := e.typ.(*tstypes.Object)
 
 		if !ok {
@@ -121,9 +121,17 @@ func (g *Generator) Generate() string {
 			continue
 		}
 
-		name = fmt.Sprintf("%s%03d", name, i)
-		g.altPkgs[obj.Name] = name
-		used[name] = struct{}{}
+		hash := util.SHA1(obj.Name)
+		fmt.Println(hash)
+		for i := 4; i < len(hash); i++ {
+			name = fmt.Sprintf("%s_%s", name, hash[:i])
+
+			if _, ok := used[name]; !ok {
+				g.altPkgs[obj.Name] = name
+				used[name] = struct{}{}
+				break
+			}
+		}
 	}
 
 	for _, e := range entries {
