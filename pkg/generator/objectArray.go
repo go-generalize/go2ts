@@ -5,15 +5,14 @@ import (
 	"bytes"
 	"fmt"
 	"sort"
-	"strings"
 
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
 )
 
 func (g *Generator) generateArray(typ *tstypes.Array) string {
-	inner := g.generateType(typ.Inner)
+	inner, union := g.generateType(typ.Inner)
 
-	if strings.HasSuffix(inner, " | "+tsNull) {
+	if union {
 		return fmt.Sprintf("(%s)[]", inner)
 	}
 
@@ -23,8 +22,8 @@ func (g *Generator) generateArray(typ *tstypes.Array) string {
 func (g *Generator) generateMap(obj *tstypes.Map) string {
 	return fmt.Sprintf(
 		"{[key: %s]: %s}",
-		g.generateType(obj.Key),
-		g.generateType(obj.Value),
+		g.generateTypeSimple(obj.Key),
+		g.generateTypeSimple(obj.Value),
 	)
 }
 
@@ -63,9 +62,9 @@ func (g *Generator) generateObject(obj *tstypes.Object, root bool) string {
 
 	for _, e := range entries {
 		if e.Optional {
-			buf.WriteString(fmt.Sprintf("\t%s?: %s;\n", e.Name, g.indent(g.generateType(e.Type))))
+			buf.WriteString(fmt.Sprintf("\t%s?: %s;\n", e.Name, g.indent(g.generateTypeSimple(e.Type))))
 		} else {
-			buf.WriteString(fmt.Sprintf("\t%s: %s;\n", e.Name, g.indent(g.generateType(e.Type))))
+			buf.WriteString(fmt.Sprintf("\t%s: %s;\n", e.Name, g.indent(g.generateTypeSimple(e.Type))))
 		}
 	}
 

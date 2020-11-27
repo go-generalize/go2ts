@@ -27,15 +27,15 @@ func quoteAll(s []string) []string {
 	return res
 }
 
-func (g *Generator) generateString(t *tstypes.String) string {
+func (g *Generator) generateString(t *tstypes.String) (string, bool) {
 	if len(t.Enum) != 0 {
-		return strings.Join(quoteAll(t.Enum), " | ")
+		return strings.Join(quoteAll(t.Enum), " | "), true
 	}
 
-	return tsString
+	return tsString, false
 }
 
-func (g *Generator) generateNumber(t *tstypes.Number) string {
+func (g *Generator) generateNumber(t *tstypes.Number) (string, bool) {
 	if len(t.Enum) != 0 {
 		buf := bytes.NewBuffer(nil)
 
@@ -47,10 +47,10 @@ func (g *Generator) generateNumber(t *tstypes.Number) string {
 			buf.WriteString(strconv.FormatInt(t.Enum[i], 10))
 		}
 
-		return buf.String()
+		return buf.String(), true
 	}
 
-	return tsNumber
+	return tsNumber, false
 }
 
 func (g *Generator) generateBoolean(t *tstypes.Boolean) string {
@@ -61,8 +61,8 @@ func (g *Generator) generateDate(t *tstypes.Date) string {
 	return tsString
 }
 
-func (g *Generator) generateNullable(t *tstypes.Nullable) string {
-	return g.generateType(t.Inner) + " | " + tsNull
+func (g *Generator) generateNullable(t *tstypes.Nullable) (string, bool) {
+	return g.generateTypeSimple(t.Inner) + " | " + tsNull, true
 }
 
 func (g *Generator) generateAny(t *tstypes.Any) string {

@@ -3,6 +3,7 @@ export type Data = {
 	Array: number[] | null;
 	C: string;
 	D: number | null;
+	EnumArray: ("a" | "b" | "c")[];
 	Foo?: {
 		V: number;
 	};

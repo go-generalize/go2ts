@@ -56,6 +56,13 @@ var (
 						Inner: &tstypes.Number{},
 					},
 				},
+				"EnumArray": {
+					Type: &tstypes.Array{
+						Inner: &tstypes.String{
+							Enum: []string{"a", "b", "c"},
+						},
+					},
+				},
 				"Array": {
 					Type: &tstypes.Nullable{
 						Inner: &tstypes.Array{

@@ -41,29 +41,37 @@ func (g *Generator) indent(s string) string {
 	return strings.Join(arr, "\n")
 }
 
-func (g *Generator) generateType(t tstypes.Type) string {
+func (g *Generator) generateType(t tstypes.Type) (generated string, union bool) {
 	switch v := t.(type) {
 	case *tstypes.Array:
-		return g.generateArray(v)
+		generated = g.generateArray(v)
 	case *tstypes.Object:
-		return g.generateObject(v, false)
+		generated = g.generateObject(v, false)
 	case *tstypes.String:
-		return g.generateString(v)
+		generated, union = g.generateString(v)
 	case *tstypes.Number:
-		return g.generateNumber(v)
+		generated, union = g.generateNumber(v)
 	case *tstypes.Boolean:
-		return g.generateBoolean(v)
+		generated = g.generateBoolean(v)
 	case *tstypes.Date:
-		return g.generateDate(v)
+		generated = g.generateDate(v)
 	case *tstypes.Nullable:
-		return g.generateNullable(v)
+		generated, union = g.generateNullable(v)
 	case *tstypes.Any:
-		return g.generateAny(v)
+		generated = g.generateAny(v)
 	case *tstypes.Map:
-		return g.generateMap(v)
+		generated = g.generateMap(v)
 	default:
 		panic("unsupported")
 	}
+
+	return
+}
+
+func (g *Generator) generateTypeSimple(t tstypes.Type) string {
+	s, _ := g.generateType(t)
+
+	return s
 }
 
 // Generate returns generated TypeScript code
