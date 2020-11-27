@@ -1,7 +1,7 @@
 // Package types contains structs/interfaces representing TypeScript types
 package types
 
-// Type interface represents all TypeScript types
+// Type interface represents all TypeScript types handled by go2ts
 type Type interface {
 	UsedAsMapKey() bool
 	String() string
@@ -11,7 +11,7 @@ type Type interface {
 type Enumerable interface {
 	Type
 
-	// AddCandidates adds an candidate for enum
+	// AddCandidates adds a candidate for enum
 	AddCandidates(v interface{})
 }
 
@@ -19,6 +19,6 @@ type Enumerable interface {
 type NamedType interface {
 	Type
 
-	// SetName sets a alternative name
+	// SetName sets an alternative name
 	SetName(name string)
 }
