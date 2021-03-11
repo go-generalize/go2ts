@@ -130,7 +130,6 @@ func (g *Generator) Generate() string {
 		}
 
 		hash := util.SHA1(obj.Name)
-		fmt.Println(hash)
 		for i := 4; i < len(hash); i++ {
 			name = fmt.Sprintf("%s_%s", name, hash[:i])
 

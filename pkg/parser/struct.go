@@ -2,7 +2,6 @@
 package parser
 
 import (
-	"fmt"
 	"go/types"
 	"reflect"
 	"strings"
@@ -100,8 +99,6 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 				Optional: false,
 			}
 		}
-
-		fmt.Println(obj.Entries[field])
 	}
 
 	return &obj
