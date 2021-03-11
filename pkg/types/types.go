@@ -12,7 +12,7 @@ type Enumerable interface {
 	Type
 
 	// AddCandidates adds a candidate for enum
-	AddCandidates(v interface{})
+	AddCandidates(key string, v interface{})
 }
 
 // NamedType interface represents named types

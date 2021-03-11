@@ -17,7 +17,7 @@ type Parser struct {
 	pkgs []*packages.Package
 
 	types       map[string]tstypes.Type
-	consts      map[string][]interface{}
+	consts      map[string][]constCandidate
 	basePackage string
 
 	Filter func(opt *FilterOpt) bool
@@ -138,7 +138,7 @@ func (p *Parser) parseNamed(t *types.Named, dep bool) tstypes.Type {
 			consts := p.consts[t.String()]
 
 			for i := range consts {
-				typ.AddCandidates(consts[i])
+				typ.AddCandidates(consts[i].Key, consts[i].Value)
 			}
 		}
 
@@ -235,7 +235,7 @@ func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
 	}()
 
 	p.types = make(map[string]tstypes.Type)
-	p.consts = make(map[string][]interface{})
+	p.consts = make(map[string][]constCandidate)
 
 	// parse const
 	packages.Visit(p.pkgs, nil, func(pkg *packages.Package) {

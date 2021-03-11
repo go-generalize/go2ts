@@ -8,11 +8,18 @@ import (
 	"strings"
 )
 
+// RawStringEnumCandidate represents a raw candidate for string enum
+type RawStringEnumCandidate struct {
+	Key   string
+	Value string
+}
+
 // String - string in TypeScript
 type String struct {
 	Name string
 
-	Enum []string
+	Enum    []string
+	RawEnum []RawStringEnumCandidate
 }
 
 var _ Type = &String{}
@@ -25,10 +32,15 @@ func (n *String) UsedAsMapKey() bool {
 }
 
 // AddCandidates adds an candidate for enum
-func (n *String) AddCandidates(v interface{}) {
+func (n *String) AddCandidates(key string, v interface{}) {
 	switch v := v.(type) {
 	case string:
 		n.Enum = append(n.Enum, v)
+
+		n.RawEnum = append(n.RawEnum, RawStringEnumCandidate{
+			Key:   key,
+			Value: v,
+		})
 	default:
 		panic(fmt.Sprintf("unsupported type for string union type: %s", reflect.TypeOf(v)))
 	}

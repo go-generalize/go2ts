@@ -28,6 +28,10 @@ var (
 		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status": &tstypes.String{
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
 			Enum: []string{"Failure", "OK"},
+			RawEnum: []tstypes.RawStringEnumCandidate{
+				{Key: "Failure", Value: "Failure"},
+				{Key: "OK", Value: "OK"},
+			},
 		},
 		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt": &tstypes.Number{
 			Name:    "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
@@ -114,6 +118,10 @@ var (
 						Value: &tstypes.String{
 							Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
 							Enum: []string{"Failure", "OK"},
+							RawEnum: []tstypes.RawStringEnumCandidate{
+								{Key: "Failure", Value: "Failure"},
+								{Key: "OK", Value: "OK"},
+							},
 						},
 					},
 				},
@@ -122,6 +130,10 @@ var (
 					Type: &tstypes.String{
 						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
 						Enum: []string{"Failure", "OK"},
+						RawEnum: []tstypes.RawStringEnumCandidate{
+							{Key: "Failure", Value: "Failure"},
+							{Key: "OK", Value: "OK"},
+						},
 					},
 				},
 				"Foo": {
@@ -173,6 +185,10 @@ var (
 		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status": &tstypes.String{
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
 			Enum: []string{"Failure", "OK"},
+			RawEnum: []tstypes.RawStringEnumCandidate{
+				{Key: "Failure", Value: "Failure"},
+				{Key: "OK", Value: "OK"},
+			},
 		},
 		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.foo": &tstypes.Object{
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.foo",
@@ -294,6 +310,10 @@ var (
 						Value: &tstypes.String{
 							Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
 							Enum: []string{"Failure", "OK"},
+							RawEnum: []tstypes.RawStringEnumCandidate{
+								{Key: "Failure", Value: "Failure"},
+								{Key: "OK", Value: "OK"},
+							},
 						},
 					},
 				},
@@ -302,6 +322,10 @@ var (
 					Type: &tstypes.String{
 						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
 						Enum: []string{"Failure", "OK"},
+						RawEnum: []tstypes.RawStringEnumCandidate{
+							{Key: "Failure", Value: "Failure"},
+							{Key: "OK", Value: "OK"},
+						},
 					},
 				},
 				"Foo": {
@@ -436,7 +460,7 @@ func TestParser_Parse(t *testing.T) {
 	type fields struct {
 		pkgs        []*packages.Package
 		types       map[string]tstypes.Type
-		consts      map[string][]interface{}
+		consts      map[string][]constCandidate
 		basePackage string
 		Filter      func(opt *FilterOpt) bool
 	}

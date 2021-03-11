@@ -10,12 +10,19 @@ import (
 	"strings"
 )
 
+// RawNumberEnumCandidate represents a raw candidate for number enum
+type RawNumberEnumCandidate struct {
+	Key   string
+	Value interface{}
+}
+
 // Number - number in TypeScript
 type Number struct {
 	Name    string
 	RawType types.BasicKind
 
-	Enum []int64
+	Enum    []int64
+	RawEnum []RawNumberEnumCandidate
 }
 
 var _ Type = &Number{}
@@ -28,7 +35,7 @@ func (e *Number) UsedAsMapKey() bool {
 }
 
 // AddCandidates adds an candidate for enum
-func (e *Number) AddCandidates(v interface{}) {
+func (e *Number) AddCandidates(key string, v interface{}) {
 	switch v.(type) {
 	case int, int8, int16, int32, int64,
 		uint, uint8, uint16, uint32, uint64:
@@ -39,6 +46,10 @@ func (e *Number) AddCandidates(v interface{}) {
 	default:
 		panic(fmt.Sprintf("unsupported type for number union type: %s", reflect.TypeOf(v)))
 	}
+	e.RawEnum = append(e.RawEnum, RawNumberEnumCandidate{
+		Key:   key,
+		Value: v,
+	})
 }
 
 // SetName sets a alternative name
