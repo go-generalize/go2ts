@@ -2,6 +2,7 @@
 package parser
 
 import (
+	"fmt"
 	"go/types"
 	"reflect"
 	"strings"
@@ -52,6 +53,8 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 		}
 
 		obj.Entries[field] = tstypes.ObjectEntry{
+			RawName:  v.Name(),
+			RawTag:   tag,
 			Type:     tst,
 			Optional: optional,
 		}
@@ -84,15 +87,21 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 		tst := p.parseType(v.Type())
 		if optional {
 			obj.Entries[field] = tstypes.ObjectEntry{
+				RawName:  v.Name(),
+				RawTag:   tag,
 				Type:     p.removeNullable(tst),
 				Optional: true,
 			}
 		} else {
 			obj.Entries[field] = tstypes.ObjectEntry{
+				RawName:  v.Name(),
+				RawTag:   tag,
 				Type:     tst,
 				Optional: false,
 			}
 		}
+
+		fmt.Println(obj.Entries[field])
 	}
 
 	return &obj

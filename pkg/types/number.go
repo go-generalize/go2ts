@@ -4,6 +4,7 @@ package types
 import (
 	"bytes"
 	"fmt"
+	"go/types"
 	"reflect"
 	"strconv"
 	"strings"
@@ -11,7 +12,8 @@ import (
 
 // Number - number in TypeScript
 type Number struct {
-	Name string
+	Name    string
+	RawType types.BasicKind
 
 	Enum []int64
 }

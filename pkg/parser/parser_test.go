@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"go/types"
 	"testing"
 
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
@@ -15,8 +16,12 @@ var (
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Embedded",
 			Entries: map[string]tstypes.ObjectEntry{
 				"foo": {
+					RawName:  "Foo",
+					RawTag:   `json:"foo,omitempty"`,
 					Optional: true,
-					Type:     &tstypes.Number{},
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 			},
 		},
@@ -25,57 +30,85 @@ var (
 			Enum: []string{"Failure", "OK"},
 		},
 		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt": &tstypes.Number{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+			Name:    "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+			RawType: types.Int,
 		},
 		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data": &tstypes.Object{
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Time": {
-					Type: &tstypes.Date{},
+					RawName: "Time",
+					Type:    &tstypes.Date{},
 				},
 				"Package": {
+					RawName: "Package",
 					Type: &tstypes.Nullable{
 						Inner: &tstypes.Object{
 							Entries: map[string]tstypes.ObjectEntry{
 								"data": {
-									Type: &tstypes.Number{},
+									RawName: "Data",
+									RawTag:  `json:"data"`,
+									Type: &tstypes.Number{
+										RawType: types.Int,
+									},
 								},
 							},
 						},
 					},
 				},
 				"foo": {
+					RawName:  "Foo",
+					RawTag:   `json:"foo,omitempty"`,
 					Optional: true,
-					Type:     &tstypes.Number{},
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 				"A": {
-					Type: &tstypes.Number{},
+					RawName: "A",
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 				"b": {
+					RawName:  "B",
+					RawTag:   `json:"b,omitempty"`,
 					Optional: true,
-					Type:     &tstypes.Number{},
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 				"C": {
-					Type: &tstypes.String{},
+					RawName: "C",
+					Type:    &tstypes.String{},
 				},
 				"D": {
+					RawName: "D",
 					Type: &tstypes.Nullable{
-						Inner: &tstypes.Number{},
+						Inner: &tstypes.Number{
+							RawType: types.Float32,
+						},
 					},
 				},
 				"EmbeddedInt": {
+					RawName: "EmbeddedInt",
 					Type: &tstypes.Number{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+						RawType: types.Int,
+						Name:    "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
 					},
 				},
 				"Array": {
+					RawName: "Array",
 					Type: &tstypes.Nullable{
 						Inner: &tstypes.Array{
-							Inner: &tstypes.Number{},
+							Inner: &tstypes.Number{
+								RawType: types.Int,
+							},
 						},
 					},
 				},
 				"Map": {
+					RawName: "Map",
 					Type: &tstypes.Map{
 						Key: &tstypes.String{},
 						Value: &tstypes.String{
@@ -85,26 +118,36 @@ var (
 					},
 				},
 				"Status": {
+					RawName: "Status",
 					Type: &tstypes.String{
 						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
 						Enum: []string{"Failure", "OK"},
 					},
 				},
 				"Foo": {
+					RawName:  "Foo",
+					RawTag:   `json:",omitempty"`,
 					Optional: true,
 					Type: &tstypes.Object{
 						Entries: map[string]tstypes.ObjectEntry{
 							"V": {
-								Type: &tstypes.Number{},
+								RawName: "V",
+								Type: &tstypes.Number{
+									RawType: types.Int,
+								},
 							},
 						},
 					},
 				},
 				"U": {
+					RawName: "U",
 					Type: &tstypes.Object{
 						Entries: map[string]tstypes.ObjectEntry{
 							"Data": {
-								Type: &tstypes.Number{},
+								RawName: "Data",
+								Type: &tstypes.Number{
+									RawType: types.Int,
+								},
 							},
 						},
 					},
@@ -118,8 +161,12 @@ var (
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Embedded",
 			Entries: map[string]tstypes.ObjectEntry{
 				"foo": {
+					RawName:  "Foo",
+					RawTag:   `json:"foo,omitempty"`,
 					Optional: true,
-					Type:     &tstypes.Number{},
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 			},
 		},
@@ -131,7 +178,10 @@ var (
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.foo",
 			Entries: map[string]tstypes.ObjectEntry{
 				"V": {
-					Type: &tstypes.Number{},
+					RawName: "V",
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 			},
 		},
@@ -139,7 +189,11 @@ var (
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/pkg.Package",
 			Entries: map[string]tstypes.ObjectEntry{
 				"data": {
-					Type: &tstypes.Number{},
+					RawName: "Data",
+					RawTag:  `json:"data"`,
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 			},
 		},
@@ -147,63 +201,94 @@ var (
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Unexported",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Data": {
-					Type: &tstypes.Number{},
+					RawName: "Data",
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 			},
 		},
 		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt": &tstypes.Number{
-			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+			Name:    "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+			RawType: types.Int,
 		},
 		"github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data": &tstypes.Object{
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Data",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Time": {
-					Type: &tstypes.Date{},
+					RawName: "Time",
+					Type:    &tstypes.Date{},
 				},
 				"Package": {
+					RawName: "Package",
 					Type: &tstypes.Nullable{
 						Inner: &tstypes.Object{
 							Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/pkg.Package",
 							Entries: map[string]tstypes.ObjectEntry{
 								"data": {
-									Type: &tstypes.Number{},
+									RawName: "Data",
+									RawTag:  `json:"data"`,
+									Type: &tstypes.Number{
+										RawType: types.Int,
+									},
 								},
 							},
 						},
 					},
 				},
 				"foo": {
+					RawName:  "Foo",
+					RawTag:   `json:"foo,omitempty"`,
 					Optional: true,
-					Type:     &tstypes.Number{},
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 				"A": {
-					Type: &tstypes.Number{},
+					RawName: "A",
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 				"b": {
+					RawName:  "B",
+					RawTag:   `json:"b,omitempty"`,
 					Optional: true,
-					Type:     &tstypes.Number{},
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 				"C": {
-					Type: &tstypes.String{},
+					RawName: "C",
+					Type:    &tstypes.String{},
 				},
 				"D": {
+					RawName: "D",
 					Type: &tstypes.Nullable{
-						Inner: &tstypes.Number{},
+						Inner: &tstypes.Number{
+							RawType: types.Float32,
+						},
 					},
 				},
 				"EmbeddedInt": {
+					RawName: "EmbeddedInt",
 					Type: &tstypes.Number{
-						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+						Name:    "github.com/go-generalize/go2ts/pkg/parser/testdata/success.EmbeddedInt",
+						RawType: types.Int,
 					},
 				},
 				"Array": {
+					RawName: "Array",
 					Type: &tstypes.Nullable{
 						Inner: &tstypes.Array{
-							Inner: &tstypes.Number{},
+							Inner: &tstypes.Number{
+								RawType: types.Int,
+							},
 						},
 					},
 				},
 				"Map": {
+					RawName: "Map",
 					Type: &tstypes.Map{
 						Key: &tstypes.String{},
 						Value: &tstypes.String{
@@ -213,28 +298,38 @@ var (
 					},
 				},
 				"Status": {
+					RawName: "Status",
 					Type: &tstypes.String{
 						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Status",
 						Enum: []string{"Failure", "OK"},
 					},
 				},
 				"Foo": {
+					RawName:  "Foo",
+					RawTag:   `json:",omitempty"`,
 					Optional: true,
 					Type: &tstypes.Object{
 						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.foo",
 						Entries: map[string]tstypes.ObjectEntry{
 							"V": {
-								Type: &tstypes.Number{},
+								RawName: "V",
+								Type: &tstypes.Number{
+									RawType: types.Int,
+								},
 							},
 						},
 					},
 				},
 				"U": {
+					RawName: "U",
 					Type: &tstypes.Object{
 						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success.Unexported",
 						Entries: map[string]tstypes.ObjectEntry{
 							"Data": {
-								Type: &tstypes.Number{},
+								RawName: "Data",
+								Type: &tstypes.Number{
+									RawType: types.Int,
+								},
 							},
 						},
 					},
@@ -257,21 +352,29 @@ var (
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Data",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Hoge": {
+					RawName: "Hoge",
 					Type: &tstypes.Object{
 						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Hoge",
 						Entries: map[string]tstypes.ObjectEntry{
 							"Data": {
-								Type: &tstypes.Number{},
+								RawName: "Data",
+								Type: &tstypes.Number{
+									RawType: types.Int,
+								},
 							},
 						},
 					},
 				},
 				"PkgHoge": {
+					RawName: "PkgHoge",
 					Type: &tstypes.Object{
 						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/pkg.Hoge",
 						Entries: map[string]tstypes.ObjectEntry{
 							"Data": {
-								Type: &tstypes.Number{},
+								RawName: "Data",
+								Type: &tstypes.Number{
+									RawType: types.Int,
+								},
 							},
 						},
 					},
@@ -282,7 +385,10 @@ var (
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict.Hoge",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Data": {
-					Type: &tstypes.Number{},
+					RawName: "Data",
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 			},
 		},
@@ -290,7 +396,10 @@ var (
 			Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/pkg.Hoge",
 			Entries: map[string]tstypes.ObjectEntry{
 				"Data": {
-					Type: &tstypes.Number{},
+					RawName: "Data",
+					Type: &tstypes.Number{
+						RawType: types.Int,
+					},
 				},
 			},
 		},
@@ -302,6 +411,7 @@ func init() {
 	re := recursiveData["github.com/go-generalize/go2ts/pkg/parser/testdata/recursive.Recursive"].(*tstypes.Object)
 
 	re.Entries["Re"] = tstypes.ObjectEntry{
+		RawName: "Re",
 		Type: &tstypes.Nullable{
 			Inner: re,
 		},

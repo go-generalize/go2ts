@@ -11,7 +11,9 @@ import (
 func (p *Parser) parseBasic(t *types.Basic) tstypes.Type {
 	switch {
 	case t.Info()&(types.IsInteger|types.IsFloat) != 0:
-		return &tstypes.Number{}
+		return &tstypes.Number{
+			RawType: t.Kind(),
+		}
 	case t.Info()&types.IsBoolean != 0:
 		return &tstypes.Boolean{}
 	case t.Info()&types.IsString != 0:
