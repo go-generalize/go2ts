@@ -46,7 +46,7 @@ export type Param = {
 ```
 
 ## Known Issues
-- enums in indirectly parsed packages are not recognized.
+- [#18](https://github.com/go-generalize/go2ts/issues/18): enums in indirectly parsed packages are not recognized.
 
 ## TODO
 - Handle MarshalJSON/UnmarshalJSON
