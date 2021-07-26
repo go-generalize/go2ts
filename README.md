@@ -45,5 +45,8 @@ export type Param = {
 }
 ```
 
+## Known Issues
+- enums in indirectly parsed packages are not recognized.
+
 ## TODO
 - Handle MarshalJSON/UnmarshalJSON
