@@ -23,6 +23,7 @@ var Type = map[string]tstypes.Type{
 						},
 					},
 				},
+				FieldIndex: 0,
 			},
 			"PkgHoge": {
 				RawName: "PkgHoge",
@@ -37,6 +38,7 @@ var Type = map[string]tstypes.Type{
 						},
 					},
 				},
+				FieldIndex: 1,
 			},
 		},
 	},
