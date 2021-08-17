@@ -70,8 +70,9 @@ var AllExportedType = map[string]tstypes.Type{
 		Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Data",
 		Entries: map[string]tstypes.ObjectEntry{
 			"Time": {
-				RawName: "Time",
-				Type:    &tstypes.Date{},
+				RawName:    "Time",
+				Type:       &tstypes.Date{},
+				FieldIndex: 0,
 			},
 			"Package": {
 				RawName: "Package",
@@ -89,6 +90,7 @@ var AllExportedType = map[string]tstypes.Type{
 						},
 					},
 				},
+				FieldIndex: 1,
 			},
 			"foo": {
 				RawName:  "Foo",
@@ -97,12 +99,22 @@ var AllExportedType = map[string]tstypes.Type{
 				Type: &tstypes.Number{
 					RawType: types.Int,
 				},
+				FieldIndex: 2,
+			},
+			"EmbeddedInt": {
+				RawName: "EmbeddedInt",
+				Type: &tstypes.Number{
+					Name:    "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.EmbeddedInt",
+					RawType: types.Int,
+				},
+				FieldIndex: 3,
 			},
 			"A": {
 				RawName: "A",
 				Type: &tstypes.Number{
 					RawType: types.Int,
 				},
+				FieldIndex: 4,
 			},
 			"b": {
 				RawName:  "B",
@@ -111,10 +123,12 @@ var AllExportedType = map[string]tstypes.Type{
 				Type: &tstypes.Number{
 					RawType: types.Int,
 				},
+				FieldIndex: 5,
 			},
 			"C": {
-				RawName: "C",
-				Type:    &tstypes.String{},
+				RawName:    "C",
+				Type:       &tstypes.String{},
+				FieldIndex: 6,
 			},
 			"D": {
 				RawName: "D",
@@ -123,13 +137,7 @@ var AllExportedType = map[string]tstypes.Type{
 						RawType: types.Float32,
 					},
 				},
-			},
-			"EmbeddedInt": {
-				RawName: "EmbeddedInt",
-				Type: &tstypes.Number{
-					Name:    "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.EmbeddedInt",
-					RawType: types.Int,
-				},
+				FieldIndex: 7,
 			},
 			"Array": {
 				RawName: "Array",
@@ -140,6 +148,19 @@ var AllExportedType = map[string]tstypes.Type{
 						},
 					},
 				},
+				FieldIndex: 8,
+			},
+			"Status": {
+				RawName: "Status",
+				Type: &tstypes.String{
+					Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Status",
+					Enum: []string{"Failure", "OK"},
+					RawEnum: []tstypes.RawStringEnumCandidate{
+						{Key: "Failure", Value: "Failure"},
+						{Key: "OK", Value: "OK"},
+					},
+				},
+				FieldIndex: 9,
 			},
 			"Map": {
 				RawName: "Map",
@@ -154,17 +175,7 @@ var AllExportedType = map[string]tstypes.Type{
 						},
 					},
 				},
-			},
-			"Status": {
-				RawName: "Status",
-				Type: &tstypes.String{
-					Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Status",
-					Enum: []string{"Failure", "OK"},
-					RawEnum: []tstypes.RawStringEnumCandidate{
-						{Key: "Failure", Value: "Failure"},
-						{Key: "OK", Value: "OK"},
-					},
-				},
+				FieldIndex: 10,
 			},
 			"Foo": {
 				RawName:  "Foo",
@@ -181,6 +192,7 @@ var AllExportedType = map[string]tstypes.Type{
 						},
 					},
 				},
+				FieldIndex: 11,
 			},
 			"U": {
 				RawName: "U",
@@ -195,6 +207,7 @@ var AllExportedType = map[string]tstypes.Type{
 						},
 					},
 				},
+				FieldIndex: 12,
 			},
 		},
 	},

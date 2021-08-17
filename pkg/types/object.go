@@ -3,8 +3,9 @@ package types
 
 // ObjectEntry is an field in objects
 type ObjectEntry struct {
-	RawName string
-	RawTag  string
+	RawName    string
+	RawTag     string
+	FieldIndex int
 
 	Type     Type
 	Optional bool

@@ -4,6 +4,7 @@ package parser
 import (
 	"go/types"
 	"reflect"
+	"sort"
 	"strings"
 
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
@@ -14,10 +15,12 @@ const (
 )
 
 func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
-	obj := tstypes.Object{
-		Entries: map[string]tstypes.ObjectEntry{},
+	type entryPair struct {
+		key   string
+		value tstypes.ObjectEntry
 	}
 
+	entries := make([][]entryPair, strct.NumFields())
 	// embedding
 	for i := 0; i < strct.NumFields(); i++ {
 		v := strct.Field(i)
@@ -41,9 +44,14 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 		tst := p.parseType(v.Type())
 		if len(field) == 0 {
 			if o, ok := tst.(*tstypes.Object); ok {
+				fieldEntries := make([]entryPair, 0, len(o.Entries))
 				for k, v := range o.Entries {
-					obj.Entries[k] = v
+					fieldEntries = append(fieldEntries, entryPair{k, v})
 				}
+				sort.Slice(fieldEntries, func(i, j int) bool {
+					return fieldEntries[i].value.FieldIndex < fieldEntries[j].value.FieldIndex
+				})
+				entries[i] = fieldEntries
 
 				continue
 			}
@@ -51,11 +59,17 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 			field = v.Name()
 		}
 
-		obj.Entries[field] = tstypes.ObjectEntry{
-			RawName:  v.Name(),
-			RawTag:   tag,
-			Type:     tst,
-			Optional: optional,
+		entries[i] = []entryPair{
+			{
+				key: field,
+				value: tstypes.ObjectEntry{
+					RawName:    v.Name(),
+					RawTag:     tag,
+					Type:       tst,
+					Optional:   optional,
+					FieldIndex: i,
+				},
+			},
 		}
 	}
 
@@ -85,19 +99,42 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 
 		tst := p.parseType(v.Type())
 		if optional {
-			obj.Entries[field] = tstypes.ObjectEntry{
-				RawName:  v.Name(),
-				RawTag:   tag,
-				Type:     p.removeNullable(tst),
-				Optional: true,
+			entries[i] = []entryPair{
+				{
+					key: field,
+					value: tstypes.ObjectEntry{
+						RawName:  v.Name(),
+						RawTag:   tag,
+						Type:     p.removeNullable(tst),
+						Optional: true,
+					},
+				},
 			}
 		} else {
-			obj.Entries[field] = tstypes.ObjectEntry{
-				RawName:  v.Name(),
-				RawTag:   tag,
-				Type:     tst,
-				Optional: false,
+			entries[i] = []entryPair{
+				{
+					key: field,
+					value: tstypes.ObjectEntry{
+						RawName:  v.Name(),
+						RawTag:   tag,
+						Type:     tst,
+						Optional: false,
+					},
+				},
 			}
+		}
+	}
+
+	obj := tstypes.Object{
+		Entries: map[string]tstypes.ObjectEntry{},
+	}
+
+	idx := 0
+	for _, entry := range entries {
+		for _, e := range entry {
+			e.value.FieldIndex = idx
+			obj.Entries[e.key] = e.value
+			idx++
 		}
 	}
 
