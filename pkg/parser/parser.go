@@ -159,6 +159,12 @@ func (p *Parser) parsePointer(u *types.Pointer) tstypes.Type {
 }
 
 func (p *Parser) parseSlice(u *types.Slice) tstypes.Type {
+	if basic, ok := u.Elem().(*types.Basic); ok && basic.Kind() == types.Byte {
+		return &tstypes.Nullable{
+			Inner: &tstypes.String{},
+		}
+	}
+
 	return &tstypes.Nullable{
 		Inner: &tstypes.Array{
 			Inner: p.parseType(u.Elem()),

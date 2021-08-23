@@ -176,6 +176,13 @@ var NormalType = map[string]tstypes.Type{
 				},
 				FieldIndex: 12,
 			},
+			"ByteSlice": {
+				RawName: "ByteSlice",
+				Type: &tstypes.Nullable{
+					Inner: &tstypes.String{},
+				},
+				FieldIndex: 13,
+			},
 		},
 	},
 }

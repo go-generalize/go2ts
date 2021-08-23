@@ -41,6 +41,8 @@ type Data struct {
 	U Unexported
 
 	Hidden int `json:"-"`
+
+	ByteSlice []byte
 }
 
 type foo struct {
