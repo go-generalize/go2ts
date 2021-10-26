@@ -18,6 +18,7 @@ type RawNumberEnumCandidate struct {
 
 // Number - number in TypeScript
 type Number struct {
+	Common
 	Name    string
 	RawType types.BasicKind
 

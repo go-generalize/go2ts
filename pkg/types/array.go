@@ -3,6 +3,7 @@ package types
 
 // Array - array in TypeScript
 type Array struct {
+	Common
 	Inner Type
 }
 

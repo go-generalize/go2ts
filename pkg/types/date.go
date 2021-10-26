@@ -3,6 +3,7 @@ package types
 
 // Date - RFC3399 string in TypeScript
 type Date struct {
+	Common
 }
 
 var _ Type = &Date{}

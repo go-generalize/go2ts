@@ -2,7 +2,9 @@
 package types
 
 // Any - any in TypeScript
-type Any struct{}
+type Any struct {
+	Common
+}
 
 var _ Type = &Any{}
 

@@ -3,6 +3,7 @@ package types
 
 // Nullable - ... | null
 type Nullable struct {
+	Common
 	Inner Type
 }
 

@@ -13,6 +13,7 @@ type ObjectEntry struct {
 
 // Object - {field1: ..., field2: ...} in TypeScript
 type Object struct {
+	Common
 	Name string
 
 	Entries map[string]ObjectEntry

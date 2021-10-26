@@ -8,12 +8,14 @@ import (
 
 var Type = map[string]tstypes.Type{
 	"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/base.Data": &tstypes.Object{
-		Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/base.Data",
+		Common: tstypes.Common{PkgName: "main"},
+		Name:   "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/base.Data",
 		Entries: map[string]tstypes.ObjectEntry{
 			"Hoge": {
 				RawName: "Hoge",
 				Type: &tstypes.Object{
-					Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/base.Hoge",
+					Common: tstypes.Common{PkgName: "main"},
+					Name:   "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/base.Hoge",
 					Entries: map[string]tstypes.ObjectEntry{
 						"Data": {
 							RawName: "Data",
@@ -43,7 +45,8 @@ var Type = map[string]tstypes.Type{
 		},
 	},
 	"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/base.Hoge": &tstypes.Object{
-		Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/base.Hoge",
+		Common: tstypes.Common{PkgName: "main"},
+		Name:   "github.com/go-generalize/go2ts/pkg/parser/testdata/conflict/base.Hoge",
 		Entries: map[string]tstypes.ObjectEntry{
 			"Data": {
 				RawName: "Data",
