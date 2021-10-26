@@ -61,8 +61,12 @@ func NewParser(dir string, filter func(*FilterOpt) bool) (*Parser, error) {
 	}
 
 	cfg := &packages.Config{
-		Mode: packages.NeedName | packages.NeedCompiledGoFiles | packages.NeedSyntax | packages.NeedTypes | packages.NeedTypesInfo,
-		Dir:  root,
+		Mode: packages.NeedName |
+			packages.NeedCompiledGoFiles |
+			packages.NeedSyntax |
+			packages.NeedTypes |
+			packages.NeedTypesInfo,
+		Dir: root,
 	}
 
 	pkgs, err := packages.Load(cfg, pkg)

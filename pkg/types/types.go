@@ -3,7 +3,7 @@ package types
 
 // Common defines common fields in the all types
 type Common struct {
-	// PkgName is the package name declared at the beggining of .go files.
+	// PkgName is the package name declared at the beginning of .go files.
 	// Currently, only exported types in the root package is available.
 	PkgName string
 }
