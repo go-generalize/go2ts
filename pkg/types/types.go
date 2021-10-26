@@ -8,10 +8,12 @@ type Common struct {
 	PkgName string
 }
 
+// SetPackageName sets PkgName in Common
 func (c *Common) SetPackageName(pkgName string) {
 	c.PkgName = pkgName
 }
 
+// GetPackageName returns PkgName in Common
 func (c *Common) GetPackageName() string {
 	return c.PkgName
 }
