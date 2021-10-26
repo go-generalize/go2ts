@@ -3,6 +3,7 @@ package types
 
 // Boolean - boolean in TypeScript
 type Boolean struct {
+	Common
 }
 
 var _ Type = &Boolean{}

@@ -16,6 +16,7 @@ type RawStringEnumCandidate struct {
 
 // String - string in TypeScript
 type String struct {
+	Common
 	Name string
 
 	Enum    []string

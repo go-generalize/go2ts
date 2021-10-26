@@ -5,6 +5,7 @@ import "fmt"
 
 // Map - {[key: ...]: ...} in TypeScript
 type Map struct {
+	Common
 	Key   Type
 	Value Type
 }

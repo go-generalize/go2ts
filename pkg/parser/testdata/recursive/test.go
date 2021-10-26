@@ -6,7 +6,8 @@ import (
 
 var Type = map[string]tstypes.Type{
 	"github.com/go-generalize/go2ts/pkg/parser/testdata/recursive/base.Recursive": &tstypes.Object{
-		Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/recursive/base.Recursive",
+		Common: tstypes.Common{PkgName: "recursive"},
+		Name:   "github.com/go-generalize/go2ts/pkg/parser/testdata/recursive/base.Recursive",
 		Entries: map[string]tstypes.ObjectEntry{
 			"Re": {}, // Overwritten by init()
 		},

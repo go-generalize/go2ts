@@ -61,8 +61,12 @@ func NewParser(dir string, filter func(*FilterOpt) bool) (*Parser, error) {
 	}
 
 	cfg := &packages.Config{
-		Mode: packages.NeedCompiledGoFiles | packages.NeedSyntax | packages.NeedTypes | packages.NeedTypesInfo,
-		Dir:  root,
+		Mode: packages.NeedName |
+			packages.NeedCompiledGoFiles |
+			packages.NeedSyntax |
+			packages.NeedTypes |
+			packages.NeedTypesInfo,
+		Dir: root,
 	}
 
 	pkgs, err := packages.Load(cfg, pkg)
@@ -284,6 +288,12 @@ func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
 			}
 
 			p.parseNamed(t, false)
+			parsed := p.parseNamed(t, false)
+
+			if parsed == nil {
+				continue
+			}
+			parsed.SetPackageName(pkg.Name)
 		}
 	})
 
