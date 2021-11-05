@@ -2,10 +2,13 @@ package parser
 
 import (
 	"fmt"
+	"go/types"
+	"log"
 	"testing"
 
 	"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict"
 	"github.com/go-generalize/go2ts/pkg/parser/testdata/recursive"
+	"github.com/go-generalize/go2ts/pkg/parser/testdata/replace"
 	"github.com/go-generalize/go2ts/pkg/parser/testdata/success"
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
 	"github.com/google/go-cmp/cmp"
@@ -33,6 +36,7 @@ func TestParser_Parse(t *testing.T) {
 		consts      map[string][]constCandidate
 		basePackage string
 		Filter      func(opt *FilterOpt) bool
+		Replacer    func(t types.Type) tstypes.Type
 	}
 	tests := []struct {
 		name    string
@@ -96,6 +100,28 @@ func TestParser_Parse(t *testing.T) {
 			},
 			wantErr: true,
 		},
+		{
+			name: "replace",
+			fields: fields{
+				pkgs:   parse(t, "./testdata/replace/base"),
+				Filter: All,
+				Replacer: func(t types.Type) tstypes.Type {
+					named, ok := t.(*types.Named)
+					if !ok {
+						return nil
+					}
+					log.Println(named.String())
+
+					if named.String() == "github.com/go-generalize/go2ts/pkg/parser/testdata/replace/base.A" {
+						return &tstypes.Number{}
+					}
+
+					return nil
+				},
+			},
+			wantRes: replace.Type,
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -105,6 +131,7 @@ func TestParser_Parse(t *testing.T) {
 				consts:      tt.fields.consts,
 				basePackage: tt.fields.basePackage,
 				Filter:      tt.fields.Filter,
+				Replacer:    tt.fields.Replacer,
 			}
 			gotRes, err := p.Parse()
 			if (err != nil) != tt.wantErr {

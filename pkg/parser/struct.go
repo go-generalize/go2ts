@@ -41,7 +41,7 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 			continue
 		}
 
-		tst := p.parseType(v.Type())
+		tst := p.parseType(v.Type(), true)
 		if len(field) == 0 {
 			if o, ok := tst.(*tstypes.Object); ok {
 				fieldEntries := make([]entryPair, 0, len(o.Entries))
@@ -97,7 +97,7 @@ func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
 			field = v.Name()
 		}
 
-		tst := p.parseType(v.Type())
+		tst := p.parseType(v.Type(), true)
 		if optional {
 			entries[i] = []entryPair{
 				{

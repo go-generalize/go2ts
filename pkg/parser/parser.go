@@ -20,7 +20,8 @@ type Parser struct {
 	consts      map[string][]constCandidate
 	basePackage string
 
-	Filter func(opt *FilterOpt) bool
+	Filter   func(opt *FilterOpt) bool
+	Replacer func(t types.Type) tstypes.Type
 }
 
 func getPackagePath(dir string) (root string, pkg string, err error) {
@@ -127,7 +128,7 @@ func (p *Parser) parseNamed(t *types.Named, dep bool) tstypes.Type {
 		p.types[t.String()] = dummy
 	}
 
-	typ := p.parseType(t.Underlying())
+	typ := p.parseType(t.Underlying(), true)
 
 	if dummy != nil {
 		//nolint
@@ -158,7 +159,7 @@ func (p *Parser) parseNamed(t *types.Named, dep bool) tstypes.Type {
 
 func (p *Parser) parsePointer(u *types.Pointer) tstypes.Type {
 	return &tstypes.Nullable{
-		Inner: p.parseType(u.Elem()),
+		Inner: p.parseType(u.Elem(), true),
 	}
 }
 
@@ -171,19 +172,19 @@ func (p *Parser) parseSlice(u *types.Slice) tstypes.Type {
 
 	return &tstypes.Nullable{
 		Inner: &tstypes.Array{
-			Inner: p.parseType(u.Elem()),
+			Inner: p.parseType(u.Elem(), true),
 		},
 	}
 }
 
 func (p *Parser) parseArray(u *types.Array) tstypes.Type {
 	return &tstypes.Array{
-		Inner: p.parseType(u.Elem()),
+		Inner: p.parseType(u.Elem(), true),
 	}
 }
 
 func (p *Parser) parseMap(u *types.Map) tstypes.Type {
-	keyType := p.parseType(u.Key())
+	keyType := p.parseType(u.Key(), true)
 
 	if !keyType.UsedAsMapKey() {
 		panic(keyType.String() + " cannot be used as key")
@@ -191,7 +192,7 @@ func (p *Parser) parseMap(u *types.Map) tstypes.Type {
 
 	return &tstypes.Map{
 		Key:   keyType,
-		Value: p.parseType(u.Elem()),
+		Value: p.parseType(u.Elem(), true),
 	}
 }
 
@@ -205,11 +206,19 @@ func (p *Parser) isStruct(u types.Type) bool {
 	return ok
 }
 
-func (p *Parser) parseType(u types.Type) tstypes.Type {
+func (p *Parser) parseType(u types.Type, dep bool) tstypes.Type {
 	var typ tstypes.Type
+	if p.Replacer != nil {
+		typ = p.Replacer(u)
+
+		if typ != nil {
+			return typ
+		}
+	}
+
 	switch u := u.(type) {
 	case *types.Named:
-		typ = p.parseNamed(u, true)
+		typ = p.parseNamed(u, dep)
 	case *types.Struct:
 		typ = p.parseStruct(u)
 	case *types.Basic:
@@ -287,8 +296,7 @@ func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
 				continue
 			}
 
-			p.parseNamed(t, false)
-			parsed := p.parseNamed(t, false)
+			parsed := p.parseType(t, false)
 
 			if parsed == nil {
 				continue
