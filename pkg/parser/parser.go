@@ -3,6 +3,7 @@ package parser
 
 import (
 	"fmt"
+	"go/token"
 	"go/types"
 	"path/filepath"
 	"reflect"
@@ -104,140 +105,10 @@ func (p *Parser) exported(t *types.Named, dep bool) bool {
 	return p.Filter(opt)
 }
 
-func (p *Parser) parseNamed(t *types.Named, dep bool) tstypes.Type {
-	if t.String() == "time.Time" {
-		return &tstypes.Date{}
-	}
-
-	exported := p.exported(t, dep)
-
-	if exported {
-		tt, ok := p.types[t.String()]
-
-		if ok {
-			return tt
-		}
-	} else if !dep {
-		return nil
-	}
-
-	// For recursive references to the same struct
-	var dummy *tstypes.Object
-	if exported && p.isStruct(t.Underlying()) {
-		dummy = &tstypes.Object{}
-		p.types[t.String()] = dummy
-	}
-
-	typ := p.parseType(t.Underlying(), true)
-
-	if dummy != nil {
-		//nolint
-		obj := typ.(*tstypes.Object)
-
-		dummy.Entries = obj.Entries
-		typ = dummy
-	}
-
-	if exported {
-		if typ, ok := typ.(tstypes.Enumerable); ok {
-			consts := p.consts[t.String()]
-
-			for i := range consts {
-				typ.AddCandidates(consts[i].Key, consts[i].Value)
-			}
-		}
-
-		if named, ok := typ.(tstypes.NamedType); ok {
-			named.SetName(t.String())
-		}
-
-		p.types[t.String()] = typ
-	}
-
-	return typ
-}
-
-func (p *Parser) parsePointer(u *types.Pointer) tstypes.Type {
-	return &tstypes.Nullable{
-		Inner: p.parseType(u.Elem(), true),
-	}
-}
-
-func (p *Parser) parseSlice(u *types.Slice) tstypes.Type {
-	if basic, ok := u.Elem().(*types.Basic); ok && basic.Kind() == types.Byte {
-		return &tstypes.Nullable{
-			Inner: &tstypes.String{},
-		}
-	}
-
-	return &tstypes.Nullable{
-		Inner: &tstypes.Array{
-			Inner: p.parseType(u.Elem(), true),
-		},
-	}
-}
-
-func (p *Parser) parseArray(u *types.Array) tstypes.Type {
-	return &tstypes.Array{
-		Inner: p.parseType(u.Elem(), true),
-	}
-}
-
-func (p *Parser) parseMap(u *types.Map) tstypes.Type {
-	keyType := p.parseType(u.Key(), true)
-
-	if !keyType.UsedAsMapKey() {
-		panic(keyType.String() + " cannot be used as key")
-	}
-
-	return &tstypes.Map{
-		Key:   keyType,
-		Value: p.parseType(u.Elem(), true),
-	}
-}
-
-func (p *Parser) parseInterface(u *types.Interface) tstypes.Type {
-	return &tstypes.Any{}
-}
-
 func (p *Parser) isStruct(u types.Type) bool {
 	_, ok := u.(*types.Struct)
 
 	return ok
-}
-
-func (p *Parser) parseType(u types.Type, dep bool) tstypes.Type {
-	var typ tstypes.Type
-	if p.Replacer != nil {
-		typ = p.Replacer(u)
-
-		if typ != nil {
-			return typ
-		}
-	}
-
-	switch u := u.(type) {
-	case *types.Named:
-		typ = p.parseNamed(u, dep)
-	case *types.Struct:
-		typ = p.parseStruct(u)
-	case *types.Basic:
-		typ = p.parseBasic(u)
-	case *types.Pointer:
-		typ = p.parsePointer(u)
-	case *types.Slice:
-		typ = p.parseSlice(u)
-	case *types.Array:
-		typ = p.parseArray(u)
-	case *types.Map:
-		typ = p.parseMap(u)
-	case *types.Interface:
-		typ = p.parseInterface(u)
-	default:
-		panic("unsupported named type: " + reflect.TypeOf(u).String())
-	}
-
-	return typ
 }
 
 // Parse parses the Go module and returns ASTs
@@ -296,7 +167,12 @@ func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
 				continue
 			}
 
-			parsed := p.parseType(t, false)
+			pp := &pkgParser{
+				Parser: p,
+				fset:   pkg.Fset,
+			}
+
+			parsed := pp.parseType(t, false)
 
 			if parsed == nil {
 				continue
@@ -313,4 +189,143 @@ func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
 // GetBasePackage returns a base module for the root package
 func (p *Parser) GetBasePackage() string {
 	return p.basePackage
+}
+
+// pkgParser parses a types.Package
+type pkgParser struct {
+	*Parser
+	fset *token.FileSet
+}
+
+func (p *pkgParser) parseNamed(t *types.Named, dep bool) tstypes.Type {
+	if t.String() == "time.Time" {
+		return &tstypes.Date{}
+	}
+
+	exported := p.exported(t, dep)
+
+	if exported {
+		tt, ok := p.types[t.String()]
+
+		if ok {
+			return tt
+		}
+	} else if !dep {
+		return nil
+	}
+
+	// For recursive references to the same struct
+	var dummy *tstypes.Object
+	if exported && p.isStruct(t.Underlying()) {
+		dummy = &tstypes.Object{}
+		p.types[t.String()] = dummy
+	}
+
+	typ := p.parseType(t.Underlying(), true)
+
+	if dummy != nil {
+		//nolint
+		obj := typ.(*tstypes.Object)
+
+		dummy.Entries = obj.Entries
+		typ = dummy
+	}
+
+	if exported {
+		if typ, ok := typ.(tstypes.Enumerable); ok {
+			consts := p.consts[t.String()]
+
+			for i := range consts {
+				typ.AddCandidates(consts[i].Key, consts[i].Value)
+			}
+		}
+
+		if named, ok := typ.(tstypes.NamedType); ok {
+			named.SetName(t.String())
+		}
+
+		pos := p.fset.Position(t.Obj().Pos())
+		typ.SetPosition(&pos)
+
+		p.types[t.String()] = typ
+	}
+
+	return typ
+}
+
+func (p *pkgParser) parsePointer(u *types.Pointer) tstypes.Type {
+	return &tstypes.Nullable{
+		Inner: p.parseType(u.Elem(), true),
+	}
+}
+
+func (p *pkgParser) parseSlice(u *types.Slice) tstypes.Type {
+	if basic, ok := u.Elem().(*types.Basic); ok && basic.Kind() == types.Byte {
+		return &tstypes.Nullable{
+			Inner: &tstypes.String{},
+		}
+	}
+
+	return &tstypes.Nullable{
+		Inner: &tstypes.Array{
+			Inner: p.parseType(u.Elem(), true),
+		},
+	}
+}
+
+func (p *pkgParser) parseArray(u *types.Array) tstypes.Type {
+	return &tstypes.Array{
+		Inner: p.parseType(u.Elem(), true),
+	}
+}
+
+func (p *pkgParser) parseMap(u *types.Map) tstypes.Type {
+	keyType := p.parseType(u.Key(), true)
+
+	if !keyType.UsedAsMapKey() {
+		panic(keyType.String() + " cannot be used as key")
+	}
+
+	return &tstypes.Map{
+		Key:   keyType,
+		Value: p.parseType(u.Elem(), true),
+	}
+}
+
+func (p *pkgParser) parseInterface(u *types.Interface) tstypes.Type {
+	return &tstypes.Any{}
+}
+
+func (p *pkgParser) parseType(u types.Type, dep bool) tstypes.Type {
+	var typ tstypes.Type
+	if p.Replacer != nil {
+		typ = p.Replacer(u)
+
+		if typ != nil {
+			return typ
+		}
+	}
+
+	switch u := u.(type) {
+	case *types.Named:
+		typ = p.parseNamed(u, dep)
+	case *types.Struct:
+		typ = p.parseStruct(u)
+	case *types.Basic:
+		typ = p.parseBasic(u)
+	case *types.Pointer:
+		typ = p.parsePointer(u)
+	case *types.Slice:
+		typ = p.parseSlice(u)
+	case *types.Array:
+		typ = p.parseArray(u)
+	case *types.Map:
+		typ = p.parseMap(u)
+	case *types.Interface:
+		typ = p.parseInterface(u)
+	default:
+		panic("unsupported named type: " + reflect.TypeOf(u).String())
+	}
+
+	return typ
 }

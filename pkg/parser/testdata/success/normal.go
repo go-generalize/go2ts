@@ -3,13 +3,17 @@ package success
 import (
 	"go/types"
 
+	"github.com/go-generalize/go2ts/pkg/parser/testutil"
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
 )
 
 var NormalType = map[string]tstypes.Type{
 	"github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Embedded": &tstypes.Object{
-		Common: tstypes.Common{PkgName: "main"},
-		Name:   "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Embedded",
+		Common: tstypes.Common{
+			PkgName:  "main",
+			Position: testutil.ParsePositionString("testdata/success/base/main.go:9:6"),
+		},
+		Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Embedded",
 		Entries: map[string]tstypes.ObjectEntry{
 			"foo": {
 				RawName:  "Foo",
@@ -23,22 +27,31 @@ var NormalType = map[string]tstypes.Type{
 		},
 	},
 	"github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Status": &tstypes.String{
-		Common: tstypes.Common{PkgName: "main"},
-		Name:   "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Status",
-		Enum:   []string{"Failure", "OK"},
+		Common: tstypes.Common{
+			PkgName:  "main",
+			Position: testutil.ParsePositionString("testdata/success/base/main.go:13:6"),
+		},
+		Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Status",
+		Enum: []string{"Failure", "OK"},
 		RawEnum: []tstypes.RawStringEnumCandidate{
 			{Key: "Failure", Value: "Failure"},
 			{Key: "OK", Value: "OK"},
 		},
 	},
 	"github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.EmbeddedInt": &tstypes.Number{
-		Common:  tstypes.Common{PkgName: "main"},
+		Common: tstypes.Common{
+			PkgName:  "main",
+			Position: testutil.ParsePositionString("testdata/success/base/main.go:20:6"),
+		},
 		Name:    "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.EmbeddedInt",
 		RawType: types.Int,
 	},
 	"github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Data": &tstypes.Object{
-		Common: tstypes.Common{PkgName: "main"},
-		Name:   "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Data",
+		Common: tstypes.Common{
+			PkgName:  "main",
+			Position: testutil.ParsePositionString("testdata/success/base/main.go:22:6"),
+		},
+		Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Data",
 		Entries: map[string]tstypes.ObjectEntry{
 			"Time": {
 				RawName:    "Time",
@@ -75,7 +88,10 @@ var NormalType = map[string]tstypes.Type{
 			"EmbeddedInt": {
 				RawName: "EmbeddedInt",
 				Type: &tstypes.Number{
-					Common:  tstypes.Common{PkgName: "main"},
+					Common: tstypes.Common{
+						PkgName:  "main",
+						Position: testutil.ParsePositionString("testdata/success/base/main.go:20:6"),
+					},
 					RawType: types.Int,
 					Name:    "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.EmbeddedInt",
 				},
@@ -127,9 +143,12 @@ var NormalType = map[string]tstypes.Type{
 			"Status": {
 				RawName: "Status",
 				Type: &tstypes.String{
-					Common: tstypes.Common{PkgName: "main"},
-					Name:   "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Status",
-					Enum:   []string{"Failure", "OK"},
+					Common: tstypes.Common{
+						PkgName:  "main",
+						Position: testutil.ParsePositionString("testdata/success/base/main.go:13:6"),
+					},
+					Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Status",
+					Enum: []string{"Failure", "OK"},
 					RawEnum: []tstypes.RawStringEnumCandidate{
 						{Key: "Failure", Value: "Failure"},
 						{Key: "OK", Value: "OK"},
@@ -142,9 +161,12 @@ var NormalType = map[string]tstypes.Type{
 				Type: &tstypes.Map{
 					Key: &tstypes.String{},
 					Value: &tstypes.String{
-						Common: tstypes.Common{PkgName: "main"},
-						Name:   "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Status",
-						Enum:   []string{"Failure", "OK"},
+						Common: tstypes.Common{
+							PkgName:  "main",
+							Position: testutil.ParsePositionString("testdata/success/base/main.go:13:6"),
+						},
+						Name: "github.com/go-generalize/go2ts/pkg/parser/testdata/success/base.Status",
+						Enum: []string{"Failure", "OK"},
 						RawEnum: []tstypes.RawStringEnumCandidate{
 							{Key: "Failure", Value: "Failure"},
 							{Key: "OK", Value: "OK"},

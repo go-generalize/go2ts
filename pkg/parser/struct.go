@@ -14,7 +14,7 @@ const (
 	jsonTagOmitempty = "omitempty"
 )
 
-func (p *Parser) parseStruct(strct *types.Struct) tstypes.Type {
+func (p *pkgParser) parseStruct(strct *types.Struct) tstypes.Type {
 	type entryPair struct {
 		key   string
 		value tstypes.ObjectEntry
