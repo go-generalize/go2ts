@@ -1,3 +1,4 @@
+// Package testutil offers test utility for parser
 package testutil
 
 import (
