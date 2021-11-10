@@ -1,9 +1,9 @@
 package parser
 
 import (
-	"fmt"
+	"go/token"
 	"go/types"
-	"log"
+	"strings"
 	"testing"
 
 	"github.com/go-generalize/go2ts/pkg/parser/testdata/conflict"
@@ -49,13 +49,10 @@ func TestParser_Parse(t *testing.T) {
 			fields: fields{
 				pkgs: parse(t, "./testdata/success/base"),
 				Filter: func(opt *FilterOpt) bool {
-					fmt.Println(opt)
 					if !Default(opt) {
 						return false
 					}
-					fmt.Println("ok")
 
-					t.Log("checking export status: ", opt.Name)
 					return opt.Name != "Unexported"
 				},
 				basePackage: base,
@@ -110,7 +107,6 @@ func TestParser_Parse(t *testing.T) {
 					if !ok {
 						return nil
 					}
-					log.Println(named.String())
 
 					if named.String() == "github.com/go-generalize/go2ts/pkg/parser/testdata/replace/base.A" {
 						return &tstypes.Number{}
@@ -142,7 +138,16 @@ func TestParser_Parse(t *testing.T) {
 				t.Logf("Parser.Parse() returned expected error = %v", err)
 			}
 
-			if diff := cmp.Diff(tt.wantRes, gotRes); diff != "" {
+			if diff := cmp.Diff(tt.wantRes, gotRes, cmp.Comparer(func(a, b *token.Position) bool {
+				if a != nil && b != nil {
+					return a.Column == b.Column &&
+						a.Line == b.Line &&
+						(strings.HasSuffix(a.Filename, b.Filename) ||
+							strings.HasSuffix(b.Filename, a.Filename))
+				}
+
+				return a == b // Both are nil, or not
+			})); diff != "" {
 				t.Errorf("Parser.Parse() differed: %s", diff)
 			}
 		})

@@ -8,7 +8,7 @@ import (
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
 )
 
-func (p *Parser) parseBasic(t *types.Basic) tstypes.Type {
+func (p *pkgParser) parseBasic(t *types.Basic) tstypes.Type {
 	switch {
 	case t.Info()&(types.IsInteger|types.IsFloat) != 0:
 		return &tstypes.Number{
