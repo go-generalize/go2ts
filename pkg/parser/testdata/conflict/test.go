@@ -29,10 +29,12 @@ var Type = map[string]tstypes.Type{
 							Type: &tstypes.Number{
 								RawType: types.Int,
 							},
+							Position: testutil.ParsePositionString("testdata/conflict/base/main.go:13:2"),
 						},
 					},
 				},
 				FieldIndex: 0,
+				Position:   testutil.ParsePositionString("testdata/conflict/base/main.go:8:2"),
 			},
 			"PkgHoge": {
 				RawName: "PkgHoge",
@@ -47,10 +49,12 @@ var Type = map[string]tstypes.Type{
 							Type: &tstypes.Number{
 								RawType: types.Int,
 							},
+							Position: testutil.ParsePositionString("testdata/conflict/base/pkg/pkg.go:4:1"),
 						},
 					},
 				},
 				FieldIndex: 1,
+				Position:   testutil.ParsePositionString("testdata/conflict/base/main.go:9:2"),
 			},
 		},
 	},
@@ -66,6 +70,7 @@ var Type = map[string]tstypes.Type{
 				Type: &tstypes.Number{
 					RawType: types.Int,
 				},
+				Position: testutil.ParsePositionString("testdata/conflict/base/main.go:13:2"),
 			},
 		},
 	},
@@ -80,6 +85,7 @@ var Type = map[string]tstypes.Type{
 				Type: &tstypes.Number{
 					RawType: types.Int,
 				},
+				Position: testutil.ParsePositionString("testdata/conflict/base/pkg/pkg.go:4:1"),
 			},
 		},
 	},

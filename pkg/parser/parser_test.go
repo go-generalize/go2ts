@@ -3,6 +3,7 @@ package parser
 import (
 	"go/token"
 	"go/types"
+	"os"
 	"strings"
 	"testing"
 
@@ -119,6 +120,26 @@ func TestParser_Parse(t *testing.T) {
 			wantErr: false,
 		},
 	}
+
+	wd, err := os.Getwd()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+	posTransformer := func(p token.Position) string {
+		p.Filename = strings.TrimPrefix(p.Filename, wd+"/")
+
+		return p.String()
+	}
+	posPtrTransformer := func(p *token.Position) *string {
+		if p == nil {
+			return nil
+		}
+
+		s := posTransformer(*p)
+		return &s
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := &Parser{
@@ -138,16 +159,7 @@ func TestParser_Parse(t *testing.T) {
 				t.Logf("Parser.Parse() returned expected error = %v", err)
 			}
 
-			if diff := cmp.Diff(tt.wantRes, gotRes, cmp.Comparer(func(a, b *token.Position) bool {
-				if a != nil && b != nil {
-					return a.Column == b.Column &&
-						a.Line == b.Line &&
-						(strings.HasSuffix(a.Filename, b.Filename) ||
-							strings.HasSuffix(b.Filename, a.Filename))
-				}
-
-				return a == b // Both are nil, or not
-			})); diff != "" {
+			if diff := cmp.Diff(tt.wantRes, gotRes, cmp.Transformer("tokenPosition", posTransformer), cmp.Transformer("tokenPositionPointer", posPtrTransformer)); diff != "" {
 				t.Errorf("Parser.Parse() differed: %s", diff)
 			}
 		})

@@ -169,6 +169,7 @@ func (p *Parser) Parse() (res map[string]tstypes.Type, err error) {
 
 			pp := &pkgParser{
 				Parser: p,
+				pkg:    pkg.Types,
 				fset:   pkg.Fset,
 			}
 
@@ -194,6 +195,7 @@ func (p *Parser) GetBasePackage() string {
 // pkgParser parses a types.Package
 type pkgParser struct {
 	*Parser
+	pkg  *types.Package
 	fset *token.FileSet
 }
 

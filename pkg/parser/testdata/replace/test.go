@@ -19,6 +19,7 @@ var Type = map[string]tstypes.Type{
 
 				Type:     &tstypes.Number{},
 				Optional: false,
+				Position: testutil.ParsePositionString("testdata/replace/base/main.go:7:2"),
 			},
 		},
 	},

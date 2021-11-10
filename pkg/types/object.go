@@ -1,6 +1,8 @@
 // Package types contains structs/interfaces representing TypeScript types
 package types
 
+import "go/token"
+
 // ObjectEntry is an field in objects
 type ObjectEntry struct {
 	RawName    string
@@ -8,6 +10,7 @@ type ObjectEntry struct {
 	FieldIndex int
 
 	Type     Type
+	Position *token.Position
 	Optional bool
 }
 
