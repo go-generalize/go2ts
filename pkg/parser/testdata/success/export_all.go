@@ -22,6 +22,7 @@ var AllExportedType = map[string]tstypes.Type{
 				Type: &tstypes.Number{
 					RawType: types.Int,
 				},
+				Position: testutil.ParsePositionString("testdata/success/base/main.go:10:2"),
 			},
 		},
 	},
@@ -49,6 +50,7 @@ var AllExportedType = map[string]tstypes.Type{
 				Type: &tstypes.Number{
 					RawType: types.Int,
 				},
+				Position: testutil.ParsePositionString("testdata/success/base/main.go:49:2"),
 			},
 		},
 	},
@@ -64,6 +66,7 @@ var AllExportedType = map[string]tstypes.Type{
 				Type: &tstypes.Number{
 					RawType: types.Int,
 				},
+				Position: testutil.ParsePositionString("testdata/success/base/pkg/pkg.go:4:1"),
 			},
 		},
 	},
@@ -79,6 +82,7 @@ var AllExportedType = map[string]tstypes.Type{
 				Type: &tstypes.Number{
 					RawType: types.Int,
 				},
+				Position: testutil.ParsePositionString("testdata/success/base/main.go:53:2"),
 			},
 		},
 	},
@@ -101,6 +105,7 @@ var AllExportedType = map[string]tstypes.Type{
 				RawName:    "Time",
 				Type:       &tstypes.Date{},
 				FieldIndex: 0,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:23:2"),
 			},
 			"Package": {
 				RawName: "Package",
@@ -117,11 +122,13 @@ var AllExportedType = map[string]tstypes.Type{
 								Type: &tstypes.Number{
 									RawType: types.Int,
 								},
+								Position: testutil.ParsePositionString("testdata/success/base/pkg/pkg.go:4:1"),
 							},
 						},
 					},
 				},
 				FieldIndex: 1,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:24:2"),
 			},
 			"foo": {
 				RawName:  "Foo",
@@ -131,6 +138,7 @@ var AllExportedType = map[string]tstypes.Type{
 					RawType: types.Int,
 				},
 				FieldIndex: 2,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:10:2"),
 			},
 			"EmbeddedInt": {
 				RawName: "EmbeddedInt",
@@ -150,6 +158,7 @@ var AllExportedType = map[string]tstypes.Type{
 					RawType: types.Int,
 				},
 				FieldIndex: 4,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:29:2"),
 			},
 			"b": {
 				RawName:  "B",
@@ -159,11 +168,13 @@ var AllExportedType = map[string]tstypes.Type{
 					RawType: types.Int,
 				},
 				FieldIndex: 5,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:30:2"),
 			},
 			"C": {
 				RawName:    "C",
 				Type:       &tstypes.String{},
 				FieldIndex: 6,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:31:2"),
 			},
 			"D": {
 				RawName: "D",
@@ -173,6 +184,7 @@ var AllExportedType = map[string]tstypes.Type{
 					},
 				},
 				FieldIndex: 7,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:32:2"),
 			},
 			"Array": {
 				RawName: "Array",
@@ -184,6 +196,7 @@ var AllExportedType = map[string]tstypes.Type{
 					},
 				},
 				FieldIndex: 8,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:34:2"),
 			},
 			"Status": {
 				RawName: "Status",
@@ -200,6 +213,7 @@ var AllExportedType = map[string]tstypes.Type{
 					},
 				},
 				FieldIndex: 9,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:36:2"),
 			},
 			"Map": {
 				RawName: "Map",
@@ -219,6 +233,7 @@ var AllExportedType = map[string]tstypes.Type{
 					},
 				},
 				FieldIndex: 10,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:37:2"),
 			},
 			"Foo": {
 				RawName:  "Foo",
@@ -236,10 +251,12 @@ var AllExportedType = map[string]tstypes.Type{
 							Type: &tstypes.Number{
 								RawType: types.Int,
 							},
+							Position: testutil.ParsePositionString("testdata/success/base/main.go:49:2"),
 						},
 					},
 				},
 				FieldIndex: 11,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:39:2"),
 			},
 			"U": {
 				RawName: "U",
@@ -255,10 +272,12 @@ var AllExportedType = map[string]tstypes.Type{
 							Type: &tstypes.Number{
 								RawType: types.Int,
 							},
+							Position: testutil.ParsePositionString("testdata/success/base/main.go:53:2"),
 						},
 					},
 				},
 				FieldIndex: 12,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:41:2"),
 			},
 			"ByteSlice": {
 				RawName: "ByteSlice",
@@ -266,6 +285,7 @@ var AllExportedType = map[string]tstypes.Type{
 					Inner: &tstypes.String{},
 				},
 				FieldIndex: 13,
+				Position:   testutil.ParsePositionString("testdata/success/base/main.go:45:2"),
 			},
 		},
 	},

@@ -82,6 +82,9 @@ func (p *pkgParser) parseStruct(strct *types.Struct) tstypes.Type {
 			continue
 		}
 
+		obj, _, _ := types.LookupFieldOrMethod(strct, true, p.pkg, v.Name())
+		pos := p.fset.Position(obj.Pos())
+
 		jsonTag := strings.SplitN(reflect.StructTag(tag).Get("json"), ",", 2)
 		field := ""
 		if len(jsonTag) >= 1 {
@@ -107,6 +110,7 @@ func (p *pkgParser) parseStruct(strct *types.Struct) tstypes.Type {
 						RawTag:   tag,
 						Type:     p.removeNullable(tst),
 						Optional: true,
+						Position: &pos,
 					},
 				},
 			}
@@ -119,6 +123,7 @@ func (p *pkgParser) parseStruct(strct *types.Struct) tstypes.Type {
 						RawTag:   tag,
 						Type:     tst,
 						Optional: false,
+						Position: &pos,
 					},
 				},
 			}

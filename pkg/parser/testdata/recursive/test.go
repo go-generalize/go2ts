@@ -27,5 +27,6 @@ func init() {
 		Type: &tstypes.Nullable{
 			Inner: re,
 		},
+		Position: testutil.ParsePositionString("testdata/recursive/base/main.go:5:2"),
 	}
 }
