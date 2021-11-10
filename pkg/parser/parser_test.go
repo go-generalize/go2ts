@@ -159,7 +159,12 @@ func TestParser_Parse(t *testing.T) {
 				t.Logf("Parser.Parse() returned expected error = %v", err)
 			}
 
-			if diff := cmp.Diff(tt.wantRes, gotRes, cmp.Transformer("tokenPosition", posTransformer), cmp.Transformer("tokenPositionPointer", posPtrTransformer)); diff != "" {
+			if diff := cmp.Diff(
+				tt.wantRes,
+				gotRes,
+				cmp.Transformer("tokenPosition", posTransformer),
+				cmp.Transformer("tokenPositionPointer", posPtrTransformer),
+			); diff != "" {
 				t.Errorf("Parser.Parse() differed: %s", diff)
 			}
 		})
