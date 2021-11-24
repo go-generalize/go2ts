@@ -6,7 +6,9 @@ import (
 )
 
 // RawStringEnumCandidate represents a raw candidate for string enum
+// Deprecated: github.com/go-generalize/go-easyparser/types.RawStringEnumCandidate
 type RawStringEnumCandidate = types.RawStringEnumCandidate
 
 // String - string in TypeScript
+// Deprecated: github.com/go-generalize/go-easyparser/types.String
 type String = types.String
