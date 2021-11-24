@@ -1,12 +1,16 @@
 module github.com/go-generalize/go2ts
 
-go 1.15
+go 1.17
 
 require (
-	github.com/go-generalize/go-easyparser v0.2.0 // indirect
+	github.com/go-generalize/go-easyparser v0.2.0
 	github.com/google/go-cmp v0.5.6
 	github.com/iancoleman/strcase v0.1.2
-	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/mod v0.4.2
-	golang.org/x/tools v0.1.7
+)
+
+require (
+	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e // indirect
+	golang.org/x/tools v0.1.7 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 )
