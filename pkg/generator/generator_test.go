@@ -23,9 +23,10 @@ func loadFile(t *testing.T, name string) string {
 
 func TestGenerator_Generate(t *testing.T) {
 	type fields struct {
-		types       map[string]tstypes.Type
-		altPkgs     map[string]string
-		BasePackage string
+		types           map[string]tstypes.Type
+		altPkgs         map[string]string
+		BasePackage     string
+		CustomGenerator func(t tstypes.Type) (generated string, union bool)
 	}
 	tests := []struct {
 		name   string
@@ -68,13 +69,36 @@ func TestGenerator_Generate(t *testing.T) {
 				BasePackage: "github.com/go-generalize/go2ts/pkg/parser/testdata/recursive",
 			},
 		},
+		{
+			name: "05",
+			want: loadFile(t, "./testdata/05.ts"),
+			fields: fields{
+				types:       testdata.Test05,
+				altPkgs:     map[string]string{},
+				BasePackage: "github.com/go-generalize/go2ts/pkg/parser/testdata/custom",
+				CustomGenerator: func(t tstypes.Type) (generated string, union bool) {
+					obj, ok := t.(*tstypes.Object)
+
+					if !ok {
+						return "", false
+					}
+
+					if obj.Name == "github.com/go-generalize/go2ts/pkg/parser/testdata.CustomTestC" {
+						return "Custom", false
+					}
+
+					return "", false
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			g := &Generator{
-				types:       tt.fields.types,
-				BasePackage: tt.fields.BasePackage,
-				altPkgs:     tt.fields.altPkgs,
+				types:           tt.fields.types,
+				BasePackage:     tt.fields.BasePackage,
+				altPkgs:         tt.fields.altPkgs,
+				CustomGenerator: tt.fields.CustomGenerator,
 			}
 			got := g.Generate()
 			if diff := cmp.Diff(tt.want, got); diff != "" {

@@ -17,7 +17,8 @@ type Generator struct {
 	types   map[string]tstypes.Type
 	altPkgs map[string]string
 
-	BasePackage string
+	BasePackage     string
+	CustomGenerator func(t tstypes.Type) (generated string, union bool)
 }
 
 // NewGenerator returns a new Generator
@@ -42,6 +43,14 @@ func (g *Generator) indent(s string) string {
 }
 
 func (g *Generator) generateType(t tstypes.Type) (generated string, union bool) {
+	if g.CustomGenerator != nil {
+		generated, union = g.CustomGenerator(t)
+
+		if generated != "" {
+			return generated, union
+		}
+	}
+
 	switch v := t.(type) {
 	case *tstypes.Array:
 		generated = g.generateArray(v)
