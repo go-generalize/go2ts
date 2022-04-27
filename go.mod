@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/go-generalize/go-easyparser v0.3.1
-	github.com/google/go-cmp v0.5.7
+	github.com/google/go-cmp v0.5.8
 	github.com/iancoleman/strcase v0.2.0
 	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3
 )
