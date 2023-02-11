@@ -6,7 +6,7 @@ require (
 	github.com/go-generalize/go-easyparser v0.3.3
 	github.com/google/go-cmp v0.5.9
 	github.com/iancoleman/strcase v0.2.0
-	golang.org/x/mod v0.7.0
+	golang.org/x/mod v0.8.0
 )
 
 require (
