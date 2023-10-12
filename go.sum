@@ -2,8 +2,9 @@ github.com/go-generalize/go-easyparser v0.3.3 h1:sX1y6pON1dWEjVIzQr1FHRboM/4LRdX
 github.com/go-generalize/go-easyparser v0.3.3/go.mod h1:8Rs26IvI49PII6hWsIRw02/rJrzBrxSrkDgY+Wbt+2E=
 github.com/go-utils/gopackages v0.0.0-20210218102646-e7d1f0008968 h1:sHm78LgJXVdlQPfpmVq4tLmssocz+tda7NJgdH6LJFY=
 github.com/go-utils/gopackages v0.0.0-20210218102646-e7d1f0008968/go.mod h1:QPVW4BzGDze3cEu7TbM7Gw9ppfYTj4NDgBW0JwNZE1g=
-github.com/google/go-cmp v0.5.9 h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=
 github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
+github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
+github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/iancoleman/strcase v0.3.0 h1:nTXanmYxhfFAMjZL34Ov6gkzEsSJZ5DbhxWjvSASxEI=
 github.com/iancoleman/strcase v0.3.0/go.mod h1:iwCmte+B7n89clKwxIoIXy/HfoL7AsD47ZCWhYzw7ho=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
